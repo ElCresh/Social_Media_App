@@ -1,0 +1,5 @@
+#commento ignorato
+
+*.properties
+/nbproject/http_header_parser/nbproject/private/
+/nbproject/private/
