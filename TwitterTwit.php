@@ -5,7 +5,6 @@
         <meta name="viewport" content="width = device-width, initial-scale = 1">
         <link rel="stylesheet" href="../Social_Media_App/css/w3.css">
         <link rel="stylesheet" href="../Social_Media_App/bootstrap/btt.css">
-        <link rel="stylesheet" href="../Social_Media_App/css/mybtt.css">
         <link rel="stylesheet" href="../Social_Media_App/css/mycss.css">
         <title>TwitterTwit</title>
     </head> 

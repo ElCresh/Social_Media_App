@@ -53,7 +53,7 @@
                 <h1 class="h2" style="font-size: 2vw; margin-top: 14vw; margin-left: 0vw; ">What does the application do?</h1>
         </div>
         <div class="container" style="margin-top: 4vw; position: absolute; margin-left: 35%; text-align: center; width: 40%; font-size: 20px">
-            <p class="text-info">As you can see from the left side panel you can select the social media of interest, this will send you to the relevant page and you can get posts time-line of your favorite social media!!</p>
+            <p class="text-info">From the left side panel you can select the social media of interest, this will send you to the relevant page and you can get posts time-line of your favorite social media!!</p>
             <p style="color: red">First, read your privacy policy!</p>
             <a href="https://www.iubenda.com/privacy-policy/61171298" class="iubenda-white iubenda-embed" title="Privacy Policy ">Privacy Policy</a><script type="text/javascript">(function (w,d) {var loader = function () {var s = d.createElement("script"), tag = d.getElementsByTagName("script")[0]; s.src="https://cdn.iubenda.com/iubenda.js"; tag.parentNode.insertBefore(s,tag);}; if(w.addEventListener){w.addEventListener("load", loader, false);}else if(w.attachEvent){w.attachEvent("onload", loader);}else{w.onload = loader;}})(window, document);</script>
         </div>

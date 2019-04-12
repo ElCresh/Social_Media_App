@@ -51,7 +51,7 @@
     /*Step 2 Create the url*/
     if(empty($access_token)) {
         //riferimento al login facebook
-        echo "<a href='{$fb->getRedirectLoginHelper()->getLoginUrl("http://localhost/FaceBookLoginProva/facebook_login.php ")}'><img src='../FaceBookLoginProva/Immagini/login_fb_button.png' width=200 </a>";
+        echo "<a href='{$fb->getRedirectLoginHelper()->getLoginUrl("http://localhost/Social_Media_App/FaceBookPost.php ")}'><img src='../Social_Media_App/content/login_fb_button.png' width=200 </a>";
     }
 
     /*Step 3 : Get Access Token*/
