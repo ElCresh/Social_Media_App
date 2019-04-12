@@ -1,0 +1,28 @@
+.myfont {
+    font-family: "Comic Sans MS", cursive, sans-serif;
+}
+
+h1 {font-size: 5vw;}
+h2 {font-size: 2vw;}
+
+.body-css{
+    background-color: beige;
+}
+
+.img-header { 
+    position: relative;
+    width: 26%;
+    height: auto;
+    right: 15.5px;
+}
+
+img.rounded-left{
+    border-top-right-radius: 60px;
+    border-bottom-width: 2px;
+}
+.center-text-image {
+    position: absolute;
+    bottom: 30%;
+    left: 32%;
+}
+
