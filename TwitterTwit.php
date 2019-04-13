@@ -10,10 +10,7 @@
     </head> 
     <body class="body-style">
         <nav class="navbar navbar-expand-md"style="background-color:  #10707f">
-            <!-- Brand -->
             <div style="text-align: center"
-                <!-- Toggler/collapsibe Button -->
-                <!-- Navbar links -->
                 <ul class="navbar-nav">
                     <li>
                         <div>
@@ -46,7 +43,6 @@
 
 <?php
     require_once('../Social_Media_App/vendor/j7mbo/twitter-api-php/TwitterAPIExchange.php');
-
     /** Set access tokens here - see: https://dev.twitter.com/apps/ **/
     $settings = array(
         'oauth_access_token' => "1116240988954071040-sE450blS1aBYGNDiAh338jlum6KEJX",
