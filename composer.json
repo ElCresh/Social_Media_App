@@ -1,0 +1,8 @@
+{
+    "require": {
+        "facebook/graph-sdk": "^5.7",
+        "abraham/twitteroauth": "^1.0",
+        "j7mbo/twitter-api-php": "^1.0",
+        "mgp25/instagram-php": "^5.0"
+    }
+}
