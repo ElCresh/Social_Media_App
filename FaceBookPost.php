@@ -1,14 +1,19 @@
 <?php
     session_start();
+
+    // Loading composer packages
+    require __DIR__.'/vendor/autoload.php';
+    require __DIR__.'/settings.php';
+    use Facebook\Facebook;
 ?>
 <html>
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width = device-width, initial-scale = 1">
-        <link rel="stylesheet" href="../Social_Media_App/css/w3.css">
-        <link rel="stylesheet" href="../Social_Media_App/bootstrap/btt.css">
-        <link rel="stylesheet" href="../Social_Media_App/css/mybtt.css">
-        <link rel="stylesheet" href="../Social_Media_App/css/mycss.css">
+        <link rel="stylesheet" href="css/w3.css">
+        <link rel="stylesheet" href="bootstrap/btt.css">
+        <link rel="stylesheet" href="css/mybtt.css">
+        <link rel="stylesheet" href="css/mycss.css">
         <title>FacebookPost</title>
     </head> 
     <body class="body-style">
@@ -32,21 +37,18 @@
 </html>
 
 <?php
-    require ("../vendor/autoload.php");
-    use Facebook\Facebook;
-    
     //step 1: Enter credentials
     //utilizzo la libreria dell'SDK
     $fb = new Facebook([
-        'app_id' => '646457439148163',
-        'app_secret' => 'caae448a3967762864ddcf43a979d514',
+        'app_id' => $fb_app_id,
+        'app_secret' => $fb_app_secret,
         'default_graph_version' => 'v3.2'
     ]);
     
     //se è vuoto significa che non si è loggati su FB
     if(empty($_SESSION['token'])){
         //pulsante rimanda al login facebook
-        echo "<a href='{$fb->getRedirectLoginHelper()->getLoginUrl("http://localhost/Social_Media_App/FaceBookPost.php ")}'><img id='btn_image' src='../Social_Media_App/content/login_fb_button.png' width=200 </a>";
+        echo "<a href='{$fb->getRedirectLoginHelper()->getLoginUrl($app_url."/FaceBookPost.php ")}'><img id='btn_image' src='content/login_fb_button.png' width=200 </a>";
     }
     
     //ottengo il token di accesso
@@ -94,7 +96,7 @@
     
     //Se ho premuto il pulsante di logout lo effettuo automaticamente su FB
     if(isset($_POST['sub'])){
-        $url = 'https://www.facebook.com/logout.php?next=http://localhost/Social_Media_App/Home.php&access_token='.$_POST['sub'];
+        $url = 'https://www.facebook.com/logout.php?next='.$app_url.'/Home.php&access_token='.$_POST['sub'];
         session_destroy();
         header('Location: '.$url);
         echo"<script>document.getElementById('btn_image').style.visibility='visible'</script>";

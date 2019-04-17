@@ -1,11 +1,15 @@
+<?php
+    // Loading composer packages
+    require __DIR__.'/vendor/autoload.php';
+?>
 <html>
     <!--TODO:Inserire codice html per interfaccia elaborazione header e accesso alle statistiche-->
     <head>
       <meta charset="UTF-8">
         <meta name="viewport" content="width = device-width, initial-scale = 1">
-        <link rel="stylesheet" href="../Social_Media_App/css/w3.css">
-        <link rel="stylesheet" href="../Social_Media_App/bootstrap/btt.css">
-        <link rel="stylesheet" href="../Social_Media_App/css/mycss.css">
+        <link rel="stylesheet" href="css/w3.css">
+        <link rel="stylesheet" href="bootstrap/btt.css">
+        <link rel="stylesheet" href="css/mycss.css">
         <title>TwitterTwit</title>
     </head> 
     <body class="body-style">
@@ -42,7 +46,6 @@
 </html>
 
 <?php
-    require_once('../Social_Media_App/vendor/j7mbo/twitter-api-php/TwitterAPIExchange.php');
     /** Set access tokens here - see: https://dev.twitter.com/apps/ **/
     $settings = array(
         'oauth_access_token' => "1116240988954071040-sE450blS1aBYGNDiAh338jlum6KEJX",
