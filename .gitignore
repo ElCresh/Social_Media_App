@@ -3,3 +3,8 @@
 *.properties
 /nbproject/http_header_parser/nbproject/private/
 /nbproject/private/
+
+# Ingorati vendor Composer. E' opportuno che ognuno
+# tenga la propria copia sincronizzata
+composer.phar
+/vendor/
