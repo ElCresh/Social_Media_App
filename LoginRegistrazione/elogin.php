@@ -70,7 +70,7 @@
             //prima verifico che sia stato spuntato almeno un social
             //rimando errore altrimenti
             if(isset($_SESSION['facebook']) || isset($_POST['facebook'])|| 
-               isset($_SESSION['twitter']) || isset($_POST['facebook'])){
+               isset($_SESSION['twitter']) || isset($_POST['twitter'])){
                 //TODO:aggiungere instagram
                 
                 //al primo accesso alla pagina verifico l'esistenza della mail inserita
@@ -127,7 +127,7 @@
                                             </li>
                                             <li class="nav-link">
                                                 <div>
-                                                <a class="nav-item alert-link w3-hover-text-lime" href="../Login.php?home"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 25 30" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-home"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                                                <a class="nav-item alert-link w3-hover-text-lime" href="Login.php?home"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 25 30" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-home"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
                                                     home
                                                 </a>
                                                 </div>
@@ -287,7 +287,7 @@
 
                                 if (isset($_POST['twitter_name'])) {
                                     $twitter_name = preg_replace("/[^A-Za-z0-9_]/", '', $_POST['twitter_name']);
-                                    $getfield = "?screen_name=".$twitter_name."&count=20";
+                                    $getfield = "?screen_name=".$twitter_name."&since_id=7.3484950086766E+17 ";
                                     $twitter = new TwitterAPIExchange($settings);
                                     //convert to an associative array
                                     $_SESSION['twitter_data']=$string = json_decode($twitter->setGetfield($getfield)

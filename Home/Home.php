@@ -21,7 +21,7 @@ if((isset($_SESSION['facebook_id']) || isset($_SESSION['twitter_id']))&&!isset($
              'twitter_id'=>false, 
              'email'=>$_SESSION['email'],
              'password'=>$_SESSION['password']];
-        //insert_daticliente_db($client_data);
+        insert_daticliente_db($client_data);
     //facebook non inserito come social    
     }elseif(!$_SESSION['facebook_id_ok']){
         $client_data = ['facebook_id'=>false, 
@@ -75,7 +75,7 @@ if((isset($_SESSION['facebook_id']) || isset($_SESSION['twitter_id']))&&!isset($
             else{
                 $body="Testo non inserito nel post";
             }
-            $id_post=$_SESSION['twitter_data'][$i]['id'];
+            $id_post=$_SESSION['twitter_data'][$i]['id_str'];
             $id_social = 2;
             $timestamp = parsing_twitter($_SESSION['twitter_data'][$i]['created_at']);
           
@@ -85,7 +85,6 @@ if((isset($_SESSION['facebook_id']) || isset($_SESSION['twitter_id']))&&!isset($
                           'id_social'=>$id_social,
                           'timestamp'=>$timestamp,
                           'userID'=>$user_id];
-            
             insert_post_data($post_data);  
             $i++;
         }
@@ -101,12 +100,14 @@ $_SESSION['userID'] = getUserID($_SESSION['email']);
             <meta charset="UTF-8">
             <meta name="viewport" content="width = device-width, initial-scale = 1">
             <link rel="stylesheet" href="../css/w3.css">
-            <link rel="stylesheet" href="../bootstrap/btt.css">
-            <link rel="stylesheet" href="../css/mybtt.css">
             <link rel="stylesheet" href="../css/mycss.css">
+            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+            <!-- jQuery library -->
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+            <!-- Popper JS -->
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
             <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-            <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
-            <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
             <link rel="stylesheet" href="../css/timeline.css">
             <title>Home</title>
             </head> 
@@ -116,24 +117,45 @@ $_SESSION['userID'] = getUserID($_SESSION['email']);
                         <div style="text-align: center;margin-left: 0"
                             <ul class="navbar-nav">
                                 <li>
-                                    <div style="border-right: 1px solid lightgray; width: 105%">
-                                        <div style>
-                                            <b class="myfont w3-opacity" style="font-size: 22px; color: white; margin-right:  15%">Home</b>
+                                    <div style="border-right: 1px solid lightgray; width: 120%; margin-left: -20%">
+                                        <div>
+                                            <b class="myfont w3-opacity" style="font-size: 22px; color: white; margin-right:  20%">Home</b>
                                         </div>
                                     </div>
                                 </li>
-                                <li class="nav-link">
+                                <li>
+                                    <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="margin-left: 1vw">
+                                        Menu
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" >
+                                        <a class="dropdown-item" href="#">View all posts timeline</a>
+                                        <a class="dropdown-item" href="#">View FaceBook posts time-line</a>
+                                        <a class="dropdown-item" href="#">View Twitter posts time-line</a>
+                                    </div>
+                                    
+                                </li>
+                                <li> 
+                                    <form name="reload" action="Home.php" method="POST" style="margin: 0">
+                                        <span style="margin-left: 10%">
+                                            <button type="submit" name="reload" value="submit" class="btn-success" style="border-style: none; height: 5.5%; border-radius: 4px">Reload!</button>
+                                        </span>
+                                    </form>
+                                </li>
+          
+                                <li class="nav-link"style="margin-left: 71vw">
                                     <div>
                                         <a class="nav-item alert-link w3-hover-text-lime" href="../LoginRegistrazione/Login.php?home"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 25 30" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-home"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
                                         LogOut
-                                    </a>
-                                        </div>
+                                        </a>
+                                    </div>
                                 </li>
                             </ul>
                         </div>
                     </nav>
+                    <ul>
+                </ul>
                 </div>
-                <div class="container">
+                <div class="container" style = "margin-top: 0">
                     <div class="page-header">
                         <h1 id="timeline" class="myfont">Post-Timeline</h1>
                     </div>
@@ -189,6 +211,13 @@ $_SESSION['userID'] = getUserID($_SESSION['email']);
                     ?>
                     </ul>
                 </div>
+                    
+                    <?php
+                        //se ho premuto il pulsante reaload ricarico gli ultimi post di tutti i social
+                        if(isset($_POST['reload'])){
+                            
+                        }
+                    ?>
             </body>
         </html>
 

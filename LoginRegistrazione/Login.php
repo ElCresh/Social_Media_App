@@ -7,9 +7,9 @@
         <meta name="viewport" content="width = device-width, initial-scale = 1">
         <link rel="stylesheet" href="../css/w3.css">
         <link rel="stylesheet" href="../bootstrap/btt.css">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
         <link rel="stylesheet" href="../css/mybtt.css">
         <link rel="stylesheet" href="../css/mycss.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
         <link rel="stylesheet" href="../node_modules/feather-icons/dist/icons/facebook.svg">    
         <title>Social_media_Data</title>
     </head> 
