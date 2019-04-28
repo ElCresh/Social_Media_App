@@ -1,6 +1,11 @@
 <?php
+    session_start();
+
     // Loading composer packages
     require __DIR__.'/vendor/autoload.php';
+    require __DIR__.'/settings.php';
+
+    $instagram = new \Instagram\Instagram();
 ?>
 <html>
     <!--TODO:Inserire codice html per interfaccia elaborazione header e accesso alle statistiche-->
@@ -10,7 +15,7 @@
         <link rel="stylesheet" href="css/w3.css">
         <link rel="stylesheet" href="bootstrap/btt.css">
         <link rel="stylesheet" href="css/mycss.css">
-        <title>TwitterTwit</title>
+        <title>Instagram Post</title>
     </head> 
     <body class="body-style">
         <nav class="navbar navbar-expand-md"style="background-color:  #10707f">
@@ -32,8 +37,46 @@
         <!-- Contet will be here -->
     </body>
 </html>
+<div class="row">
+    <?php
+        // Repo DOCS: https://github.com/liamcottle/Instagram-SDK-PHP
 
-<?php
-    // used https://github.com/mgp25/Instagram-API
+        $username = "";
+        $password = ";
 
-?>
+        try {
+            //Instagram Login
+            $instagram->login($username, $password);
+
+            //Get User Pst
+            do{
+                if(isset($timelineFeed)){
+                    $timelineFeed = $instagram->getMyUserFeed($timelineFeed->getNextMaxId());
+                }else{
+                    $timelineFeed = $instagram->getMyUserFeed();
+                }
+                
+                foreach($timelineFeed->getItems() as $timelineFeedItem){ ?>
+                    <div class="col-sm-3">
+                        <div class="card">
+                        <img src="<?= $timelineFeedItem->getImageVersions2()->getCandidates()[0]->getUrl() ?>" class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <p class="card-text">
+                                <?php
+                                    if(!is_null($timelineFeedItem->getCaption())){
+                                        echo $timelineFeedItem->getCaption()->getText();
+                                    }
+                                ?>
+                            </p>
+                        </div>
+                        </div>
+                    </div>
+                <?php }
+            }while(!is_null($timelineFeed->getNextMaxId()));
+            $instagram->logout();
+        } catch(Exception $e){
+            //Something went wrong...
+            echo $e->getMessage() . "\n";
+        }
+    ?>
+</div>
