@@ -2,7 +2,7 @@
     require '../database_query/db_conn_query.php';
     require '../php-smtp-email-validation/mail/smtp_validateEmail.class.php';
     require ("../vendor/autoload.php");
-    require_once('../vendor/j7mbo/twitter-api-php/TwitterAPIExchange.php');
+
     use Facebook\Facebook;
     session_start();
     
@@ -108,9 +108,11 @@
                             <meta charset="UTF-8">
                             <meta name="viewport" content="width = device-width, initial-scale = 1">
                             <link rel="stylesheet" href="../css/w3.css">
-                            <link rel="stylesheet" href="../bootstrap/btt.css">
+                            <link rel="stylesheet" href="../css/bootstrap.min.css">
                             <link rel="stylesheet" href="../css/mybtt.css">
                             <link rel="stylesheet" href="../css/mycss.css">
+                            <script src="../bootstrap.min.js"></script>
+                            <script src="../popper.min.js"></script>
                             <title>Login</title>
                         </head> 
                         <body class="body-style" >

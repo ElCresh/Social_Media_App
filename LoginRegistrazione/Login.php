@@ -1,15 +1,14 @@
-<?php
-    session_start();
-?>
+<?php session_start(); ?>
 <html>
     <head>
         <meta charset="UTF-8">
-        <meta name="viewport" content="width = device-width, initial-scale = 1">
+        <meta name="viewport" content="width = device-width, initial-scale=1">
         <link rel="stylesheet" href="../css/w3.css">
-        <link rel="stylesheet" href="../bootstrap/btt.css">
+        <link rel="stylesheet" href="../css/bootstrap.min.css">
         <link rel="stylesheet" href="../css/mybtt.css">
         <link rel="stylesheet" href="../css/mycss.css">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+        <script src="../bootstrap.min.js"></script>
+        <script src="../popper.min.js"></script>
         <link rel="stylesheet" href="../node_modules/feather-icons/dist/icons/facebook.svg">    
         <title>Social_media_Data</title>
     </head> 
@@ -41,9 +40,9 @@
                         <input type="password" id="password" type="password" class="form-control" name="password" placeholder="Password">
                     </div>
                     <div style="margin-top: 2%">
-                        <button type="submit" name="btnAccedi" class="btn btn-light w3-hover-yellow" style="border-style: solid; border-color: lightgrey; background-color: greenyellow; color: blue">ENTER</button>
-                        <button  type="button" name="btnRegistrati" id ="reg" onclick="myFunction()" class="btn btn-light w3-hover-yellow" style="border-style: solid; border-color: lightgrey; background-color: greenyellow; color: blue">NEW USER</button>
-                        <button type="reset" name="reset" class="btn btn-light w3-hover-yellow" style="border-style: solid; border-color: lightgrey; background-color: greenyellow; color: blue">reset</button> 
+                        <button type="submit" name="btnAccedi" class="btn btn-light w3-hover-yellow" style="border-style: solid; border-color: lightgrey; background-color: greenyellow; color: blue">Login</button>
+                        <button  type="button" name="btnRegistrati" id ="reg" onclick="myFunction()" class="btn btn-light w3-hover-yellow" style="border-style: solid; border-color: lightgrey; background-color: greenyellow; color: blue">Register</button>
+                        <button type="reset" name="reset" class="btn btn-light w3-hover-yellow" style="border-style: solid; border-color: lightgrey; background-color: greenyellow; color: blue">Clear</button> 
                     </div>
                     <div>
                         <div  id="check" class="checkbox w3-hide">
