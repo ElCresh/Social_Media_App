@@ -10,7 +10,7 @@
         <script src="../bootstrap.min.js"></script>
         <script src="../popper.min.js"></script>
         <link rel="stylesheet" href="../node_modules/feather-icons/dist/icons/facebook.svg">    
-        <title>Social_media_Data</title>
+        <title>Social Media Data</title>
     </head> 
     <body>
         <div class="container-fluid" style="background-image: linear-gradient(100deg, #9fb8ad 0%, #0062cc 50%, #2cb5e8 100%);position: absolute; border-style: solid; border-color: black; max-height: max-content">

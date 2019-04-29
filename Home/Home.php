@@ -1,12 +1,13 @@
 <?php
-require '../database_query/db_conn_query.php';
-require '../parsing_date/parsing_date.php';
+require_once ('../settings.php');
+require_once ('../database_query/db_conn_query.php');
+require_once ('../php-smtp-email-validation/mail/smtp_validateEmail.class.php');
 require ("../vendor/autoload.php");
+
 use Facebook\Facebook;
 
 session_start();
-
-db_select("localhost", "root", "", "socialmediadata");
+db_select();
 
 //eleboro i dati che sono stati inseriti nella registrazione e li inserisco nel db
 //verifico che siano stati settati almeno uno dei tre social, che non sia stato premuto il bottone accedi
@@ -14,30 +15,30 @@ db_select("localhost", "root", "", "socialmediadata");
 //TODO:inserire parte per instagram
 if((isset($_SESSION['facebook_id']) || isset($_SESSION['twitter_id']))&&!isset($_SESSION['btnAccedi'])&&!isset($_SESSION['inserito'])){
     $_SESSION['inserito']=true;
-    //twitter non è stato inserito come social
     if(!$_SESSION['twitter_id_ok']){
+        //twitter non è stato inserito come social
         //inserisco prima i valori relativi alla tabella tb_clienti
         $client_data = ['facebook_id'=>$_SESSION['facebook_id'], 
-             'twitter_id'=>false, 
-             'email'=>$_SESSION['email'],
-             'password'=>$_SESSION['password']];
-        insert_daticliente_db($client_data);
-    //facebook non inserito come social    
+                        'twitter_id'=>false, 
+                        'email'=>$_SESSION['email'],
+                        'password'=>$_SESSION['password']];
+        insert_daticliente_db($client_data);   
     }elseif(!$_SESSION['facebook_id_ok']){
+        //facebook non inserito come social
         $client_data = ['facebook_id'=>false, 
-             'twitter_id'=>$_SESSION['twitter_id'], 
-             'email'=>$_SESSION['email'],
-             'password'=>$_SESSION['password']];
+                        'twitter_id'=>$_SESSION['twitter_id'], 
+                        'email'=>$_SESSION['email'],
+                        'password'=>$_SESSION['password']];
         insert_daticliente_db($client_data);
-    //TODO:inserire controllo instagram
-    //altrimenti sono stati settati tutti    
+    //TODO:inserire controllo instagram    
     }else{
+        //altrimenti sono stati settati tutti
         //TODO:inserire id instagram
         //inserisco prima i valori relativi alla tabella tb_clienti
         $client_data = ['facebook_id'=>$_SESSION['facebook_id'], 
-             'twitter_id'=>$_SESSION['twitter_id'], 
-             'email'=>$_SESSION['email'],
-             'password'=>$_SESSION['password']];
+                        'twitter_id'=>$_SESSION['twitter_id'], 
+                        'email'=>$_SESSION['email'],
+                        'password'=>$_SESSION['password']];
         insert_daticliente_db($client_data);
     }
     //se ho settato facebook scarico i dati relativi ai post nel db
@@ -100,16 +101,13 @@ $_SESSION['userID'] = getUserID($_SESSION['email']);
             <meta charset="UTF-8">
             <meta name="viewport" content="width = device-width, initial-scale = 1">
             <link rel="stylesheet" href="../css/w3.css">
+            <link rel="stylesheet" href="../css/bootstrap.min.css">
+            <link rel="stylesheet" href="../css/mybtt.css">
             <link rel="stylesheet" href="../css/mycss.css">
-            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-            <!-- jQuery library -->
-            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-            <!-- Popper JS -->
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-            <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+            <script src="../bootstrap.min.js"></script>
+            <script src="../popper.min.js"></script>
             <link rel="stylesheet" href="../css/timeline.css">
-            <title>Home</title>
+            <title>Social Media Data - Home</title>
             </head> 
                 <body class="body-style" >
                 <div class="container-fluid" style="background-color: #10707f">  

@@ -2,15 +2,21 @@
 $conn;
 
 //selezione del db e connesisone
-function db_select($host, $user, $password, $db){
+function db_select(){
+    //DB Configs
+    $host = "localhost";
+    $user = "root";
+    $pasw = "";
+    $dbnm = "SocialMediaApp";
+    
     global $conn;
-    $conn = mysqli_connect($host,$user,$password, $db);
-    if (mysqli_connect_errno())
-    {
+    $conn = mysqli_connect($host,$user,$pasw,$dbnm);
+
+    if (mysqli_connect_errno()){
         echo "Failed to connect to MySQL: " . mysqli_connect_error()."<br>";
         die;
     }else{
-        mysqli_select_db($conn, $db);
+        mysqli_select_db($conn, $dbnm);
     }
 }
 
@@ -31,7 +37,7 @@ function query($query){
 function insert_daticliente_db($data){
     global $conn;
     //la password inserita nella registrazione la modifico con la funzione hash
-    $data['password']=password_hash($data['password'], PASSWORD_DEFAULT);
+    $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
     //se twitter non è stato scelto eseguo query facebook
     if(!$data['twitter_id']){
         $query = "insert into tb_clienti (id_client, email, pass, facebook_id, twitter_id) values(null,'".$data['email']."', '".$data['password']."', '".$data['facebook_id']."', null)";

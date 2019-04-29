@@ -1,6 +1,7 @@
 <?php
-    require '../database_query/db_conn_query.php';
-    require '../php-smtp-email-validation/mail/smtp_validateEmail.class.php';
+    require_once ('../settings.php');
+    require_once ('../database_query/db_conn_query.php');
+    require_once ('../php-smtp-email-validation/mail/smtp_validateEmail.class.php');
     require ("../vendor/autoload.php");
 
     use Facebook\Facebook;
@@ -9,6 +10,12 @@
     //varibile globale che contiene il risultato della verifica esistenza email
     global $results;
     
+    /*
+        NOTA!: Verificare se opportuno mantente i dati del form in sessione.
+        Specialmente la password in chiaro che non dovrebbe mai venir salvata
+        in sessione per questioni di sicurezza
+    */
+
     //recupero il contenuto della textbox email
     if((isset($_POST['email'])||isset($_POST['password']))){
         $_SESSION['email'] = $_POST['email'];
@@ -17,25 +24,23 @@
     }
     
     //verifico che la pagina sia stata richiesta dalla form o dal bottone accedi di facebook
-    if($_SERVER['REQUEST_METHOD']=='POST' || isset($_GET['code']))
+    if($_SERVER['REQUEST_METHOD'] == 'POST' || isset($_GET['code']))
     {
         //ho premuto il bottone accedi e non è settato il get di facebook
         if(isset($_POST['btnAccedi']) && empty($_GET['code']))
         {        
-            $_SESSION['btnAccedi']=$_POST['btnAccedi'];
+            $_SESSION['btnAccedi'] = $_POST['btnAccedi'];
             $autenticazione_cliente = "select pass from tb_clienti where email ='".$_SESSION['email']."'"; 
             
-            db_select("localhost", "root", "", "socialmediadata");
+            db_select();
             
-            $risultato_query=query($autenticazione_cliente);
+            $risultato_query = query($autenticazione_cliente);
                     
             //data l'email inserita verifico la corrispondenza della psw
             if(($riga_cliente = mysqli_fetch_assoc($risultato_query)))
             {
-                
                 //verifico la corrispondeza della psw inserita(hashed) e quella stored nel db
-                $autenticato_utente  = password_verify($_SESSION['password'], $riga_cliente['pass']);
-                 
+                $autenticato_utente  = password_verify($_SESSION['password'], $riga_cliente['pass']); 
             }else{
                 $autenticato_utente = false;
             }
@@ -77,17 +82,23 @@
                 if(isset($_POST['facebook']) || isset($_POST['twitter'])){
                     //TODO:aggiungere instagram
                     
+                    /*
+                        NOTA!: Con la mia e-mail (ac@andreacrescentini.com) questo metodo non funzione.
+                        L'ho commentato per cercare di risolvere il problema.
+                    */
+
                     //utilizzo il protocollo smtp per verificare l'esistenza della mail inserita
-                    $sender = 'link89luca@gmail.com';
-                    $SMTP_Validator = new SMTP_validateEmail();
+                    //$sender = 'link89luca@gmail.com';
+                    //$SMTP_Validator = new SMTP_validateEmail();
                     //$SMTP_Validator->debug = true;-->debug true viene mostrata la serie di richieste/risposte
-                    $SMTP_Validator->debug = false;
-                    $results = $SMTP_Validator->validate(array($_SESSION['email']), $sender);
-                    $_SESSION['risultato'] = $results[$_SESSION['email']];
+                    //$SMTP_Validator->debug = false;
+                    //$results = $SMTP_Validator->validate(array($_SESSION['email']), $sender);
+                    //$_SESSION['risultato'] = $results[$_SESSION['email']];
+                    $_SESSION['risultato'] = true;
                 }
                 
                 //ricerco che la mail non sia stata già utilizzata
-                db_select("localhost", "root", "", "socialmediadata");                   
+                db_select();                   
                 $query = "select email from tb_clienti where email = '".$_SESSION['email']."'";
                 $risultato_utenti = mysqli_fetch_assoc(query($query));
                 
@@ -157,8 +168,8 @@
                             //step 1: Enter credentials
                             //utilizzo la libreria dell'SDK
                             $fb = new Facebook([
-                                'app_id' => '646457439148163',
-                                'app_secret' => 'caae448a3967762864ddcf43a979d514',
+                                'app_id' => $fb_app_id,
+                                'app_secret' => $fb_app_secret,
                                 'default_graph_version' => 'v3.2'
                             ]);
                             
@@ -171,7 +182,7 @@
                                     </li>
                                 </ul>
                             <?php
-                                echo"<a href='{$fb->getRedirectLoginHelper()->getLoginUrl("http://localhost/Social_Media_App/LoginRegistrazione/elogin.php")}'><img id='btn_image' src='../content/login_fb_button.png' width=200 class='hoverable' style='position:absolute; margin-left:10%'></a></div>";
+                                echo"<a href='{$fb->getRedirectLoginHelper()->getLoginUrl($app_url."LoginRegistrazione/elogin.php")}'><img id='btn_image' src='../content/login_fb_button.png' width=200 class='hoverable' style='position:absolute; margin-left:10%'></a></div>";
                                 //ottengo il token di accesso
                                 $access_token = $fb->getRedirectLoginHelper()->getAccessToken();
 
