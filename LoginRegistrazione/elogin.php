@@ -42,7 +42,8 @@
             
             //l'autenticazione è andata a buon fine
             if($autenticato_utente){
-                $id_utente = mysqli_fetch_assoc(query($query));
+                $query = "select id_client from tb_clienti where email = '".$_SESSION['email']."'";
+                $_SESSION['id_cliente'] = mysqli_fetch_assoc(query($query));
                 db_close_conn($conn);    
                 header("Location:../Home/Home.php");
                 
@@ -150,8 +151,6 @@
                                 
                             ?>    
                     <?php
-                        //se è stata settato la checkbox facebook allora mostro il pulsante di connessione
-                        if(isset($_SESSION['facebook']) || isset($_POST['facebook'])){
                             //step 1: Enter credentials
                             //utilizzo la libreria dell'SDK
                             $fb = new Facebook([
@@ -170,15 +169,15 @@
                                 </ul>
                             <?php
                                 echo"<a href='{$fb->getRedirectLoginHelper()->getLoginUrl("http://localhost/Social_Media_App/LoginRegistrazione/elogin.php")}'><img id='btn_image' src='../content/login_fb_button.png' width=200 class='hoverable' style='position:absolute; margin-left:10%'></a></div>";
+                                
                                 //ottengo il token di accesso
                                 $access_token = $fb->getRedirectLoginHelper()->getAccessToken();
-
                                 /*Step 4: Get the graph user*/
-                                if(isset($access_token) || isset($_SESSION['token'])) {
+                                if(isset($access_token) || isset($_SESSION['fb_token'])) {
                                     try {
                                         if(isset($access_token)){
                                             //salvo il token di accesso nella variabile di sessione
-                                            $_SESSION['token'] = $access_token->getValue();
+                                            $_SESSION['fb_token'] = $access_token->getValue();
                                             //ho effettuato l'accesso
                                             $response = $fb->get('/me', $access_token);
                                             //get user graph
@@ -187,21 +186,24 @@
                                             $_SESSION['facebook_id']=$user_id = $fb_user->getId();
                                         }else{
                                             //ho effettuato l'accesso
-                                            $response = $fb->get('/me', $_SESSION['token']);
+                                            $response = $fb->get('/me', $_SESSION['fb_token']);
                                         }
                                         //rendo invisibile il pulsante
-                                        if(isset($_SESSION['token'])){
+                                        if(isset($_SESSION['fb_token'])){
                                             echo"<script>document.getElementById('connection').style.display='none'</script>";
                                             echo"<script>document.getElementById('btn_image').style.display='none'</script>";
                                         }
 
                                         //estraggo i post
-                                        $posts_request= $fb->get('/me/posts?fields=message, created_time, id, permalink_url', $_SESSION['token']);
+                                        $posts_request= $fb->get('/me/posts?fields=message, created_time, id, permalink_url', $_SESSION['fb_token']);
                                         //ottengo il body della richiesta. ovvero il testo dei post
                                         $_SESSION['post'] = $posts_request->getBody();
                                         //true ritorna un'arrai invece di un oggetto
                                         $_SESSION['facebook_data']=$json=json_decode($_SESSION['post'], true);
-                                        
+                                        //estraggo i post
+                                        //$name_request= json_decode($fb->get('me?fields=first_name', $_SESSION['fb_token'])->getBody(), true);
+                                        $_SESSION['facebook_data']=$json=json_decode($posts_request->getBody(), true);
+                                        //$_SESSION['client_name'] = $name_request['first_name'];
                                                                                 
                                         //verifico che sia stato settato twitter come social o che sia stato settato l'id
                                         if(isset($_SESSION['twitter']) || isset($_SESSION['twitter_id'])){
@@ -231,7 +233,6 @@
                                     echo 'Facebook SD returned an error: ' . $e->getMessage();
                                 }
                             }
-                        }
                         //se è stata selezionata la checkbox di twitter
                         if(isset($_SESSION['twitter'])){
                             //se non è stato settato facebook mostro una interfaccia altrimenti ne mostro un'altra

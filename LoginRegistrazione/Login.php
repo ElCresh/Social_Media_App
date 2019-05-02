@@ -15,7 +15,7 @@
     </head> 
     <body>
         <div class="container-fluid" style="background-image: linear-gradient(100deg, #9fb8ad 0%, #0062cc 50%, #2cb5e8 100%);position: absolute; border-style: solid; border-color: black; max-height: max-content">
-            <div class="center-text-image"><h1 class="myfont" style="color: white">Social Media Data</h1></div>
+            <div class="center-text-image" style="margin-left: 20px"><h1 class="myfont" style="color: white; font-size: 5vw">Social Media Data</h1></div>
             <img src="../content/social-image.jpg" alt="Social" class="img-header rounded-left" style="height: 12.9vw; width: 12.6vw;">
         </div>
         <div style="margin-top: 1vw; position: absolute">
