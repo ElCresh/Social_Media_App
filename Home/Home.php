@@ -30,10 +30,13 @@ if((isset($_SESSION['facebook_id']) || isset($_SESSION['twitter_id']))&&!isset($
                         'email'=>$_SESSION['email'],
                         'password'=>$_SESSION['password']];
         insert_daticliente_db($client_data);
-    //TODO:inserire controllo instagram    
+    //TODO:inserire controllo instagram
+    
+    //altrimenti sono stati settati tutti    
     }else{
         //altrimenti sono stati settati tutti
         //TODO:inserire id instagram
+        
         //inserisco prima i valori relativi alla tabella tb_clienti
         $client_data = ['facebook_id'=>$_SESSION['facebook_id'], 
                         'twitter_id'=>$_SESSION['twitter_id'], 
@@ -104,58 +107,53 @@ $_SESSION['userID'] = getUserID($_SESSION['email']);
             <link rel="stylesheet" href="../css/bootstrap.min.css">
             <link rel="stylesheet" href="../css/mybtt.css">
             <link rel="stylesheet" href="../css/mycss.css">
-            <script src="../bootstrap.min.js"></script>
-            <script src="../popper.min.js"></script>
+                <link rel="stylesheet" href="../css/popin.css">
+            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+            <!-- jQuery library -->
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+            
+            <!-- Popper JS -->
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+            
+            <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
             <link rel="stylesheet" href="../css/timeline.css">
-            <title>Social Media Data - Home</title>
-            </head> 
-                <body class="body-style" >
-                <div class="container-fluid" style="background-color: #10707f">  
-                    <nav class="navbar navbar-expand-xl"style="background-color:  #10707f">
-                        <div style="text-align: center;margin-left: 0"
-                            <ul class="navbar-nav">
-                                <li>
-                                    <div style="border-right: 1px solid lightgray; width: 120%; margin-left: -20%">
-                                        <div>
-                                            <b class="myfont w3-opacity" style="font-size: 22px; color: white; margin-right:  20%">Home</b>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="margin-left: 1vw">
+            <title>Home</title>
+        </head> 
+        <body>
+                <nav class="navbar navbar-expand-xl"style="background-color:  #10707f">
+                            <table>
+                                <tr>
+                                    <td style="border-right: solid 1px lightgray; padding-right: 20px; padding-left: 15px">
+                                        <b class="myfont w3-opacity" style="font-size: 25px; color: white">Home</b>
+                                    </td>
+                                    <td style="padding-left: 20px">
+                                        <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="font-size: 15px">
                                         Menu
-                                    </button>
-                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" >
-                                        <a class="dropdown-item" href="#">View all posts timeline</a>
-                                        <a class="dropdown-item" href="#">View FaceBook posts time-line</a>
-                                        <a class="dropdown-item" href="#">View Twitter posts time-line</a>
-                                    </div>
-                                    
-                                </li>
-                                <li> 
-                                    <form name="reload" action="Home.php" method="POST" style="margin: 0">
-                                        <span style="margin-left: 10%">
-                                            <button type="submit" name="reload" value="submit" class="btn-success" style="border-style: none; height: 5.5%; border-radius: 4px">Reload!</button>
-                                        </span>
-                                    </form>
-                                </li>
-          
-                                <li class="nav-link"style="margin-left: 71vw">
-                                    <div>
-                                        <a class="nav-item alert-link w3-hover-text-lime" href="../LoginRegistrazione/Login.php?home"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 25 30" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-home"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
-                                        LogOut
-                                        </a>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                    </nav>
-                    <ul>
-                </ul>
-                </div>
-                <div class="container" style = "margin-top: 0">
+                                        </button>
+                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" >
+                                            <a class="dropdown-item" href="#">View all posts timeline</a>
+                                            <a class="dropdown-item" href="#">View FaceBook posts time-line</a>
+                                            <a class="dropdown-item" href="#">View Twitter posts time-line</a>
+                                        </div>
+                                    </td>
+                                    <td>
+                                            <form name="reload" action="Home.php" method="POST" style="margin: 0;">
+                                                <button type="submit" title="click me to upload new posts" id="reload" name="reload" value="submit" class="btn-success w3-hover-light-blue" style="border-style: none; height: 35px; border-radius: 4px; font-size: 15px">Reload!</button>
+                                            </form>
+                                    </td>
+                                    <td style="text-align: right" class="container">
+                                            <a class="nav-item alert-link w3-hover-text-lime" style="font-size: 15px; margin-right: 50px" href="../LoginRegistrazione/Login.php?home"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 25 30" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-home"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                                            LogOut
+                                            </a>
+                                    </td>
+                                </tr>
+                            </table>                   
+                </nav>
+                    
+                <div class="container" id="timeline" style = "margin-top: 0">
                     <div class="page-header">
-                        <h1 id="timeline" class="myfont">Post-Timeline</h1>
+                        <h1 class="myfont">Post-Timeline</h1>
                     </div>
                     <ul class="timeline">
                     <?php
@@ -209,15 +207,145 @@ $_SESSION['userID'] = getUserID($_SESSION['email']);
                     ?>
                     </ul>
                 </div>
-                    
                     <?php
-                        //se ho premuto il pulsante reaload ricarico gli ultimi post di tutti i social
-                        if(isset($_POST['reload'])){
+                        //se ho premuto il pulsante reaload carico gli ultimi post di tutti i social
+                        if(isset($_POST['reload']) || isset($_SESSION['reload'])){
+                            //verifico a quali social è iscritto l'utente. Solo la prima volta
+                            if(isset($_POST['reload'])){
+                                //rendo invisibile la timeline
+                                ?> 
+                                    <script>
+                                        document.getElementById('timeline').style.display='none';
+                                    </script>
+                                <?php
+                                $_SESSION['reload'] = $_POST['reload'];
+                                //TODO: inserire insagram nella query
+                                $query_social = ("select facebook_id, twitter_id from tb_clienti where email = '".$_SESSION['email']."'");  
+                                $iscrizione_social = query($query_social);      
+                                $riga = mysqli_fetch_assoc($iscrizione_social);
+                            }   
+                            //se sono un utente facebook allora richiedo il login
+                            if(isset($riga['facebook_id'])&&($riga['facebook_id']!=null)){
+                                $fb = new Facebook([
+                                            'app_id' => '646457439148163',
+                                            'app_secret' => 'caae448a3967762864ddcf43a979d514',
+                                            'default_graph_version' => 'v3.3'
+                                ]);
+                                //se è settata il token di accesso allora non richido il login
+                                if(!isset($_SESSION['fb_token'])){
+                                ?>
+                                    <div class="popin">    
+                                        <input id="popin_check_1" type="checkbox" class="popin_check" hidden checked="true" />
+                                        <label class="layer" for="popin_check_1"></label>
+                                        <div class="content fadeIn">
+                                            <p style="color: red"><b>Effettua l'accesso su facebook:</b></p>
+                                    <?php
+                                            echo"<a href='{$fb->getRedirectLoginHelper()->getLoginUrl("http://localhost/Social_Media_App/Home/Home.php")}'><img id='btn_image' src='../content/login_fb_button.png' width=200 class='hoverable' style='position:absolute; margin-left:10%'></a>";
+                                            //setto a null in modo tale da non richiedere nuovamente l'accesso
+                                            //$_riga['facebook_id']=null;
+                                    ?>
+                                            <label class="modal-button close" for="popin_check_1" onclick="closeFunction()">Close</label>          
+                                            <script>
+                                                function closeFunction(){
+                                                    document.getElementById('timeline').style.display='block';
+                                                    //se sono uscito con il pulsante close risetto la variabile
+                                                    <?php $_riga['facebook_id']='id'?>
+                                                }
+                                            </script>
+                                        </div>
+                                    </div>
+                                    <?php 
+                                }
+                            //al ritorno dalla richiesta ottengo l'access token
+                            }elseif($riga['facebook_id']==null){
+                                $fb = new Facebook([
+                                                'app_id' => '646457439148163',
+                                                'app_secret' => 'caae448a3967762864ddcf43a979d514',
+                                                'default_graph_version' => 'v3.3'
+                                            ]);
+                                        //ottengo il token di accesso
+                                        $access_token = $fb->getRedirectLoginHelper()->getAccessToken();                      
+                                        try {
+                                            if(isset($access_token)){
+                                                //salvo il token di accesso nella variabile di sessione
+                                                $_SESSION['fb_token'] = $access_token->getValue();
+                                                //ho effettuato l'accesso
+                                                $response = $fb->get('/me', $access_token);
+                                                //get user graph
+                                                $fb_user = $response->getGraphUser();
+                                                //ottengo l'id di facebook
+                                                $fb_id = $fb_user->getId();
+                                            }else{
+                                                //ho già effettuato l'accesso
+                                                $response = $fb->get('/me', $_SESSION['fb_token']);
+                                            }
+                                            //seleziono la data dell'ultimo post facebook dal db
+                                            $query_fb_last_post = ('select date_time as last_post from tb_post where social = 1 group by (date_time) desc limit 1');
+                                            $result = query($query_fb_last_post);
+                                            $last_post_time=mysqli_fetch_assoc($result);
+                     
+                                            $date_time=explode(" ", $last_post_time['last_post']);
+                                            $date = explode('-', $date_time[0]);
+                                            $time = explode(':', $date_time[1]);
+                                            $timestamp=mktime(($time[0]+02), $time[1], $time[2], $date[1], $date[2], $date[0]);            
+                                            //richiamo l'API per ricevere post successivi a quelli salvati nel db
+                                            $posts_request= json_decode($fb->get("me?fields=feed.since(".$timestamp.")&date_format=U", $_SESSION['fb_token'])->getBody(), true);
+                                            //parto a raccogliere i post dal primo fino a quello che ho già salvato
+                                            $i=0;        
+                                            //ricerco i valori per i post di facebook e li inserisco in tb_post
+                                            while(isset($posts_request['feed']['data'][$i])){
+                                                if(isset($posts_request['feed']['data'][$i]['message'])){
+                                                    $body=$posts_request['feed']['data'][$i]['message'];
+                                                }
+                                                $id_post=$posts_request['feed']['data'][$i]['id'];
+                                                $id_social = 1;                                      
+                                                $user_id = getUserID($_SESSION['email']);
+                                                $post_data = ['body'=> addslashes($body),
+                                                              'id_post'=>$id_post,
+                                                              'id_social'=>$id_social,
+                                                              'timestamp'=>date('Y-m-d H:i:s',$posts_request['feed']['data'][$i]['created_time']),
+                                                              'userID'=>$fb_id];
+                                                //insert_post_data($post_data);   
+                                                $i++;
+                                            }
+                                        } catch (\Facebook\Exceptions\FacebookResponseException $e) {
+                                            echo  'Graph returned an error: ' . $e->getMessage();
+                                        } catch (\Facebook\Exceptions\FacebookSDKException $e) {
+                                            // When validation fails or other local issues
+                                            echo 'Facebook SD returned an error: ' . $e->getMessage();
+                                        }
+                                    }
+                            }           
+                            /*$ch = curl_init();
+                            // imposto la URL della risorsa remota da scaricare
+                            curl_setopt($ch, CURLOPT_URL, 'https://socialmediadata.herokuapp.com/');
+                            // imposto che non vengano scaricati gli header
+                            curl_setopt($ch, CURLOPT_HEADER, 0);
+                            // eseguo la chiamata
+                            $return= html_entity_decode(curl_exec($ch), $assoc = TRUE);
+                            print_r($return['entry']['time']);
+                            // chiudo cURL
+                            curl_close($ch);*/
                             
-                        }
-                    ?>
+                            /*if(isset(){
+                                //verif
+                                //seleziono la data dell'ultimo post dal db
+                                $query_fb_last_post = ('select date_time as last_post from tb_post where social = 1 group by (date_time) desc limit 1');
+                                $last_post = query($query_fb_last_post);
+                                $date_time=explode(" ", $last_post);
+                                $date = explode('-', $date_time[0]);
+                                $time = explode(':', $date_time[1]);
+                                $timestamp=mktime($time[0], $time[1], $time[2], $date[1], $date[2], $date[0]);
+                                //richiamo l'API per ricevere post successivi a quelli salvati nel db
+                                $posts_request= json_decode($fb->get("me/posts?since=".$timestamp."", $_SESSION['fb_token']), $assoc=TRUE);
+                                print($posts_request);
+                                
+                            }
+                        }*/
+                    ?> 
+                    <script type="text/javascript">
+                    
+                        
+                    </script>
             </body>
         </html>
-
-
-
