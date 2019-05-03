@@ -1,5 +1,6 @@
 <?php
 require_once ('../settings.php');
+require_once ('../parsing_date/parsing_date.php');
 require_once ('../database_query/db_conn_query.php');
 require_once ('../php-smtp-email-validation/mail/smtp_validateEmail.class.php');
 require ("../vendor/autoload.php");
@@ -13,6 +14,7 @@ db_select();
 //verifico che siano stati settati almeno uno dei tre social, che non sia stato premuto il bottone accedi
 //e che sia la prima volta che accedo al db per caricarlo
 //TODO:inserire parte per instagram
+
 if((isset($_SESSION['facebook_id']) || isset($_SESSION['twitter_id']))&&!isset($_SESSION['btnAccedi'])&&!isset($_SESSION['inserito'])){
     $_SESSION['inserito']=true;
     if(!$_SESSION['twitter_id_ok']){
@@ -44,6 +46,9 @@ if((isset($_SESSION['facebook_id']) || isset($_SESSION['twitter_id']))&&!isset($
                         'password'=>$_SESSION['password']];
         insert_daticliente_db($client_data);
     }
+
+    print_r($_SESSION);
+    die();
     //se ho settato facebook scarico i dati relativi ai post nel db
     if($_SESSION['facebook_id_ok']){
         $i = 0;

@@ -315,32 +315,26 @@
                                         echo "<h3>Sorry, there was a problem.</h3><p>Twitter returned the following error message:</p><p><em>".$string['errors'][0]["message"]."</em></p>";exit();}
           
                                     if(isset($_SESSION['facebook']) || isset($_SESSION['facebook_id'])){
-                                            if(isset($_SESSION['facebook_id_ok'])){
-                                                $_SESSION['twitter_id_ok']=true;
-                                                echo"<script>
-                                                    document.getElementById('twit_connection').style.display='none';
-                                                     location.href = '../Home/Home.php';
-                                                </script>";
-                                                unset($_SESSION['twitter']);
-                                            }else{
-                                                $_SESSION['twitter_id_ok']=true;
-                                                //script per eliminare dalla pagina gli elementi di twitter
-                                                echo"<script>
-                                                    document.getElementById('twit_connection').style.display='none';
-                                                </script>";
-                                                unset($_SESSION['twitter']);
-                                            }
+                                        if(isset($_SESSION['facebook_id_ok'])){
+                                            $_SESSION['twitter_id_ok']=true;
+                                            unset($_SESSION['twitter']);
+                                            header("Location: ../Home/Home.php");
                                         }else{
-                                            //altrimenti setto che non ho l'id di twitter TODO:instagram e rimando alla Home
-                                            $_SESSION['facebook_id_ok']=false;
-                                            $_SESSION['twitter_id_ok'] = true;
-                                            db_close_conn($conn);
-                                            unset($_SESSION['facebook']);
+                                            $_SESSION['twitter_id_ok']=true;
+                                            //script per eliminare dalla pagina gli elementi di twitter
                                             echo"<script>
                                                 document.getElementById('twit_connection').style.display='none';
-                                                location.href = '../Home/Home.php';
                                             </script>";
+                                            unset($_SESSION['twitter']);
                                         }
+                                    }else{
+                                        //altrimenti setto che non ho l'id di twitter TODO:instagram e rimando alla Home
+                                        $_SESSION['facebook_id_ok']=false;
+                                        $_SESSION['twitter_id_ok'] = true;
+                                        db_close_conn($conn);
+                                        unset($_SESSION['facebook']);
+                                        header("Location: ../Home/Home.php");
+                                    }
                                 ?>
                                     </body>
                                 </html>
