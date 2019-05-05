@@ -34,23 +34,15 @@ function insert_daticliente_db($data){
     $data['password']=password_hash($data['password'], PASSWORD_DEFAULT);
     //se twitter non è stato scelto eseguo query facebook
     if(!$data['twitter_id']){
-        $query = "insert into tb_clienti (id_client, email, pass, facebook_id, twitter_id) values(null,'".$data['email']."', '".$data['password']."', '".$data['facebook_id']."', null)";
+        $query = "insert into tb_clienti (id_client, email, pass, facebook_id, twitter_id, facebook_name, twitter_name) values(null,'".$data['email']."', '".$data['password']."', '".$data['facebook_id']."', null,'".$data['facebook_name'].",null)";
     //se facebook non è stato scelto eseguo query twitter        
     }elseif(!$data['facebook_id']){
-        $query = "insert into tb_clienti (id_client, email, pass, facebook_id, twitter_id) values(null,'".$data['email']."', '".$data['password']."', null, '".$data['twitter_id']."')";
+        $query = "insert into tb_clienti (id_client, email, pass, facebook_id, twitter_id, facebook_name, twitter_name) values(null,'".$data['email']."', '".$data['password']."', null, '".$data['twitter_id']."', null, '".$data['twitter_name']."')";
     //altrimenti sono stati settati entrambe    
     }else{
-        $query = "insert into tb_clienti (id_client, email, pass, facebook_id, twitter_id) values(null,'".$data['email']."', '".$data['password']."', '".$data['facebook_id']."', '".$data['twitter_id']."')";
+        $query = "insert into tb_clienti (id_client, email, pass, facebook_id, twitter_id, facebook_name, twitter_name) values(null,'".$data['email']."', '".$data['password']."', '".$data['facebook_id']."', '".$data['twitter_id']."', '".$data['facebook_name']."', '".$data['twitter_name']."')";
     }
     mysqli_query($conn, $query);
-}
-
-//get user facebook credentials
-function getUser_f_ID($user_ID){
-    global $conn;
-    $query = "select user_f_ID from client_f where user_f_ID =".$user_ID."";
-    $risultato = mysqli_query($conn, $query);
-    return $risultato;
 }
 
 //get ID from email
@@ -60,6 +52,14 @@ function getUserID($email){
     $risultato = mysqli_query($conn, $query);
     $riga=mysqli_fetch_assoc($risultato);
     return $riga['id_client'];
+}
+
+function getUserFbName($email){
+    global $conn;
+    $query = "select facebook_name from tb_clienti where email ='".$email."'";
+    $risultato = mysqli_query($conn, $query);
+    $riga=mysqli_fetch_assoc($risultato);
+    return $riga['facebook_name'];
 }
 
 //inserimento dati post

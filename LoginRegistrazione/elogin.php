@@ -148,10 +148,9 @@
                                 elseif (isset ($_SESSION['twitter'])) {
                                     echo"<div><b><p style='color:red; margin-left: 2%; margin-top: 2%'>Effettua i login ai tuoi social:</p></b></div>";
                                 }
-                                
                             ?>    
                     <?php
-                            //step 1: Enter credentials
+                    //step 1: Enter credentials
                             //utilizzo la libreria dell'SDK
                             $fb = new Facebook([
                                 'app_id' => '646457439148163',
@@ -160,20 +159,19 @@
                             ]);
                             
                             //pulsante rimanda al login facebook
-                            ?>
-                                <div id='connection' class='container' style='margin-left: 0; margin-top: 1%; position: absolute; max-width:max-content'>
+                            ?><div id='connection' class='container' style='margin-left: 0; margin-top: 1%; position: absolute; max-width:max-content'>
                                 <ul>
                                     <li>
                                         <p style='font-size: 20px;'>Effettua il login su FaceBook:</p>
                                     </li>
-                                </ul>
-                            <?php
+                                </ul><?php
                                 echo"<a href='{$fb->getRedirectLoginHelper()->getLoginUrl("http://localhost/Social_Media_App/LoginRegistrazione/elogin.php")}'><img id='btn_image' src='../content/login_fb_button.png' width=200 class='hoverable' style='position:absolute; margin-left:10%'></a></div>";
                                 
                                 //ottengo il token di accesso
                                 $access_token = $fb->getRedirectLoginHelper()->getAccessToken();
                                 /*Step 4: Get the graph user*/
                                 if(isset($access_token) || isset($_SESSION['fb_token'])) {
+                                    
                                     try {
                                         if(isset($access_token)){
                                             //salvo il token di accesso nella variabile di sessione
@@ -184,6 +182,8 @@
                                             $fb_user = $response->getGraphUser();
                                             //ottengo l'id di facebook
                                             $_SESSION['facebook_id']=$user_id = $fb_user->getId();
+                                            $_SESSION['facebook_name'] = $response->getGraphUser()->getName();
+                                            
                                         }else{
                                             //ho effettuato l'accesso
                                             $response = $fb->get('/me', $_SESSION['fb_token']);
@@ -194,15 +194,17 @@
                                             echo"<script>document.getElementById('btn_image').style.display='none'</script>";
                                         }
 
-                                        //estraggo i post
-                                        $posts_request= $fb->get('/me/posts?fields=message, created_time, id, permalink_url', $_SESSION['fb_token']);
+                                        //estraggo i post anche quelli in cui sono taggato
+                                        $posts_request= $fb->get('me/feed?fields=message, created_time, id, permalink_url,full_picture', $_SESSION['fb_token']);
                                         //ottengo il body della richiesta. ovvero il testo dei post
                                         $_SESSION['post'] = $posts_request->getBody();
                                         //true ritorna un'arrai invece di un oggetto
+ 
                                         $_SESSION['facebook_data']=$json=json_decode($_SESSION['post'], true);
+                                        
                                         //estraggo i post
                                         //$name_request= json_decode($fb->get('me?fields=first_name', $_SESSION['fb_token'])->getBody(), true);
-                                        $_SESSION['facebook_data']=$json=json_decode($posts_request->getBody(), true);
+                                        //$_SESSION['facebook_data']=$json=json_decode($posts_request->getBody(), true);
                                         //$_SESSION['client_name'] = $name_request['first_name'];
                                                                                 
                                         //verifico che sia stato settato twitter come social o che sia stato settato l'id
@@ -211,6 +213,7 @@
                                             if(isset($_SESSION['twitter_id_ok'])){
                                                 $_SESSION['facebook_id_ok']=true;
                                                 header('Location:../Home/Home.php');
+                                                
                                             //altrimenti significa che ancora non mi sono loggato su twitter quindi rimango sulla pagina
                                             }else{
                                                 $_SESSION['facebook_id_ok']=true;
@@ -287,7 +290,7 @@
                                 $requestMethod = "GET";
 
                                 if (isset($_POST['twitter_name'])) {
-                                    $twitter_name = preg_replace("/[^A-Za-z0-9_]/", '', $_POST['twitter_name']);
+                                    $_SESSION['twitter_name']=$twitter_name = preg_replace("/[^A-Za-z0-9_]/", '', $_POST['twitter_name']);
                                     $getfield = "?screen_name=".$twitter_name."&since_id=7.3484950086766E+17 ";
                                     $twitter = new TwitterAPIExchange($settings);
                                     //convert to an associative array
