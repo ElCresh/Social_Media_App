@@ -30,7 +30,7 @@ db_select("localhost", "root", "", "socialmediadata");
             <table>
                 <tr>
                     <td style="border-right: solid 1px lightgray; padding-right: 20px; padding-left: 15px">
-                        <b class="myfont w3-opacity" style="font-size: 25px; color: white">Home</b>
+                        <b class="myfont w3-opacity" style="font-size: 25px; color: white">FacebookHome</b>
                     </td>
                     <td style="padding-left: 20px">
                         <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="font-size: 15px">
