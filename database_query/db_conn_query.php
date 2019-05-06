@@ -45,23 +45,6 @@ function insert_daticliente_db($data){
     mysqli_query($conn, $query);
 }
 
-//get ID from email
-function getUserID($email){
-    global $conn;
-    $query = "select id_client from tb_clienti where email ='".$email."'";
-    $risultato = mysqli_query($conn, $query);
-    $riga=mysqli_fetch_assoc($risultato);
-    return $riga['id_client'];
-}
-
-function getUserFbName($email){
-    global $conn;
-    $query = "select facebook_name from tb_clienti where email ='".$email."'";
-    $risultato = mysqli_query($conn, $query);
-    $riga=mysqli_fetch_assoc($risultato);
-    return $riga['facebook_name'];
-}
-
 //inserimento dati post
 function insert_post_data($data){
     global $conn;
@@ -69,10 +52,33 @@ function insert_post_data($data){
     mysqli_query($conn, $query);
 }
 
-//ottenere i post
-function obtainPost($userid){
+//ottenere tutti i post
+function getAllPost($userid){
     global $conn;
     $query = "select body, date_time, social from tb_post where user_id =".$userid." group by(date_time) desc;";
     $risultato = mysqli_query($conn, $query);
+    return $risultato;
+}
+
+//ottenere i post facebook
+function getFbPost($userid){
+    global $conn;
+    $query = "select body, date_time, social from tb_post where user_id =".$userid." and social = 1 group by(date_time) desc;";
+    $risultato = mysqli_query($conn, $query);
+    return $risultato;
+}
+
+//ottenere i post twitter
+function getTwPost($userid){
+    global $conn;
+    $query = "select body, date_time, social from tb_post where user_id =".$userid." and social = 2 group by(date_time) desc;";
+    $risultato = mysqli_query($conn, $query);
+    return $risultato;
+}
+//ottengo i dati dell'utente(id, nome facebook e username twitter)
+function getUserData($email){
+    global $conn;
+    $query = "select id_client, facebook_name, twitter_name from tb_clienti where email ='".$email."'";
+    $risultato = mysqli_fetch_assoc(mysqli_query($conn, $query));
     return $risultato;
 }

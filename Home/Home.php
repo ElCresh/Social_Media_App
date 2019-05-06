@@ -35,7 +35,6 @@ if((isset($_SESSION['facebook_id']) || isset($_SESSION['twitter_id']))&&!isset($
     //altrimenti sono stati settati tutti    
     }else{
         //TODO:inserire id instagram
-        
         //inserisco prima i valori relativi alla tabella tb_clienti
         $client_data = ['facebook_id'=>$_SESSION['facebook_id'], 
                         'twitter_id'=>$_SESSION['twitter_id'], 
@@ -106,10 +105,10 @@ if((isset($_SESSION['facebook_id']) || isset($_SESSION['twitter_id']))&&!isset($
     }
     //TODO:inserire controllo per instagram
 }
-//prelevo lo userID a partire dalla mail    
-$_SESSION['userID'] = getUserID($_SESSION['email']);
-$_SESSION['fb_name'] = getUserFbName($_SESSION['email']);
-$FbName = explode(" ", $_SESSION['fb_name']);
+//prelevo userID, fb_name e twitter_name
+$_SESSION['user_data'] = getUserData($_SESSION['email']);
+//separo il firstName da lastName
+$FbName = explode(" ", $_SESSION['user_data']['facebook_name']);
 //se ho premuto il bottone accedi oppure la registrazione è andata a buon fine sono nella schermata Home
 ?>
 <html>
@@ -127,6 +126,7 @@ $FbName = explode(" ", $_SESSION['fb_name']);
         <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
         <link rel="stylesheet" href="../css/timeline.css">
         <link rel="stylesheet" href="../css/popin.css">
+        <link rel="icon" href="../content/social-image.ico" />
         <title>Home</title>
     </head> 
     <body>
@@ -141,9 +141,8 @@ $FbName = explode(" ", $_SESSION['fb_name']);
                             Menu
                         </button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" >
-                            <a class="dropdown-item" href="#">View all posts time-line</a>
-                            <a class="dropdown-item" href="#">View FaceBook posts time-line</a>
-                            <a class="dropdown-item" href="#">View Twitter posts time-line</a>
+                            <a class="dropdown-item" href="../FacebookTimeLine/FacebookTimeline.php">View FaceBook posts time-line</a>
+                            <a class="dropdown-item" href="../TwitterTimeLine/TwitterTimeline.php">View Twitter posts time-line</a>
                         </div>
                     </td>
                     <td>
@@ -166,7 +165,7 @@ $FbName = explode(" ", $_SESSION['fb_name']);
             <ul class="timeline">
                 <?php
                 //ricerco i post da stampare sulla time-line
-                $risultato = obtainPost($_SESSION['userID']);
+                $risultato = getAllPost($_SESSION['user_data']['id_client']);
                 $i=0;
                 while ($_SESSION['riga']=mysqli_fetch_assoc($risultato)){
                 ?>
@@ -227,12 +226,12 @@ $FbName = explode(" ", $_SESSION['fb_name']);
                                 }
                             }
                             elseif($_SESSION['riga']['social']==2){
-                                 $stringa = explode('://', $_SESSION['riga']['body']);
-                                        if($stringa[0]==='http'||$stringa[0]==='https'){
-                                            echo "<p><b>Commento assente. Link al post:</b></p><a href=".$riga['body'].">".$riga['body']."</a>";
-                                        }else{ 
-                                            echo"<p>".$_SESSION['riga']['body']."</p>";
-                                        } 
+                                $stringa = explode('://', $_SESSION['riga']['body']);
+                                if($stringa[0]==='http'||$stringa[0]==='https'){
+                                    echo "<p><b>Commento assente. Link al post:</b></p><a href=".$riga['body'].">".$riga['body']."</a>";
+                                }else{ 
+                                    echo"<p>".$_SESSION['riga']['body']."</p>";
+                                } 
                             }        
                             ?></div>
                     </div>
@@ -343,49 +342,55 @@ $FbName = explode(" ", $_SESSION['fb_name']);
                     }
                 }
             }
+            //se utilizzo twitter come social
             if(isset($_SESSION['riga']['twitter_id'])&&($_SESSION['riga']['twitter_id']!=null)){
-                
+                //seleziono la data dell'ultimo post facebook dal db
+                $query_tw_last_post = ('select id as last_post from tb_post where social = 2 group by (date_time) desc limit 1');
+                $result = mysqli_fetch_assoc(query($query_tw_last_post));
+                /** Set access token here - see: https://dev.twitter.com/apps/ **/
+                $settings = array(
+                    'oauth_access_token' => "1116240988954071040-sE450blS1aBYGNDiAh338jlum6KEJX",
+                    'oauth_access_token_secret' => "zmKuK6tQMr2CO07KxZgEDaYlbULOxwnlxbd5jcLebGBiF",
+                    'consumer_key' => "PKPZ8tUJVDXPK7RwZUMz3Z8tJ",
+                    'consumer_secret' => "MkMXiFpvNfDEXawZZnieInFd8g3d8LTdGK7krmu3JvYtWA67r5"
+                );
+                $url = "https://api.twitter.com/1.1/statuses/user_timeline.json";
+                $requestMethod = "GET";
+                $_SESSION['twitter_name']= preg_replace("/[^A-Za-z0-9_]/", '', $_SESSION['twitter_name']);
+                $getfield = "?screen_name=".$_SESSION['user_data']['twitter_name']."&since_id=".$result['last_post']."";
+                $twitter = new TwitterAPIExchange($settings);
+                //convert to an associative array
+                $_SESSION['twitter_data']=json_decode($twitter->setGetfield($getfield)
+                    ->buildOauth($url, $requestMethod)
+                    ->performRequest(),$assoc = TRUE);
+                $i=0;
+                while(isset($_SESSION['twitter_data'][$i])){
+                //se il testo è presente
+                    if(isset($_SESSION['twitter_data'][$i]['text'])){
+                    $body=$_SESSION['twitter_data'][$i]['text'];
+                }
+            else{
+                $body="Testo non inserito nel post";
             }
+            $id_post=$_SESSION['twitter_data'][$i]['id_str'];
+            $id_social = 2;
+            $timestamp = parsing_twitter($_SESSION['twitter_data'][$i]['created_at']);
+            $user_id = getUserID($_SESSION['email']);
+            $post_data = ['body'=> addslashes($body),
+                          'id_post'=>$id_post,
+                          'id_social'=>$id_social,
+                          'timestamp'=>$timestamp,
+                          'userID'=>$user_id];
+            insert_post_data($post_data);  
+            $i++;
         }
-            //ottengo il token di accesso
-                            
-                    
-                    //ricarico la pagina per mostrare la nuova timeline
-                   
-               
-                //non ho facebook come social
-                       
-                    /*$ch = curl_init();
-                    // imposto la URL della risorsa remota da scaricare
-                    curl_setopt($ch, CURLOPT_URL, 'https://socialmediadata.herokuapp.com/');
-                    // imposto che non vengano scaricati gli header
-                    curl_setopt($ch, CURLOPT_HEADER, 0);
-                    // eseguo la chiamata
-                    $return= html_entity_decode(curl_exec($ch), $assoc = TRUE);
-                    print_r($return['entry']['time']);
-                    // chiudo cURL
-                    curl_close($ch);*/
-
-                    /*if(isset(){
-                        //verif
-                        //seleziono la data dell'ultimo post dal db
-                        $query_fb_last_post = ('select date_time as last_post from tb_post where social = 1 group by (date_time) desc limit 1');
-                        $last_post = query($query_fb_last_post);
-                        $date_time=explode(" ", $last_post);
-                        $date = explode('-', $date_time[0]);
-                        $time = explode(':', $date_time[1]);
-                        $timestamp=mktime($time[0], $time[1], $time[2], $date[1], $date[2], $date[0]);
-                        //richiamo l'API per ricevere post successivi a quelli salvati nel db
-                        $posts_request= json_decode($fb->get("me/posts?since=".$timestamp."", $_SESSION['fb_token']), $assoc=TRUE);
-                        print($posts_request);
-
-                    }
-                }*/
-            ?> 
-            <script type="text/javascript">
+    }
+}
+        ?> 
+        <script type="text/javascript">
             function closeFunction(){
                 document.getElementById('timeline').style.display='block';
             }
-            </script>
+        </script>
     </body>
 </html>
