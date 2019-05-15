@@ -49,8 +49,6 @@ if((isset($_SESSION['facebook_id']) || isset($_SESSION['twitter_id']))&&!isset($
         insert_daticliente_db($client_data);
     }
 
-    print_r($_SESSION);
-    die();
     //se ho settato facebook scarico i dati relativi ai post nel db
     if($_SESSION['facebook_id_ok']){
         $i = 0;
@@ -280,7 +278,7 @@ $FbName = explode(" ", $_SESSION['user_data']['facebook_name']);
                     <div class="content fadeIn">
                         <p style="color: red"><b>Effettua l'accesso su facebook:</b></p>
                         <?php
-                        echo"<a href='{$fb->getRedirectLoginHelper()->getLoginUrl("http://localhost/Social_Media_App/Home/Home.php")}'><img  id='btn_image' src='../content/login_fb_button.png' width=200 class='hoverable' style='position:absolute; margin-left:10%'></a>";
+                        echo"<a href='{$fb->getRedirectLoginHelper()->getLoginUrl($app_url."Home/Home.php")}'><img  id='btn_image' src='../content/login_fb_button.png' width=200 class='hoverable' style='position:absolute; margin-left:10%'></a>";
                         ?>
                     <label class="modal-button close" for="popin_check_1" onclick="closeFunction()">Close</label>          
                     </div>
