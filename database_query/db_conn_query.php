@@ -40,32 +40,15 @@ function insert_daticliente_db($data){
     $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
     //se twitter non è stato scelto eseguo query facebook
     if(!$data['twitter_id']){
-        $query = "insert into tb_clienti (id_client, email, pass, facebook_id, twitter_id) values(null,'".$data['email']."', '".$data['password']."', '".$data['facebook_id']."', null)";
+        $query = "insert into tb_clienti (id_client, email, pass, facebook_id, twitter_id, facebook_name, twitter_name) values(null,'".$data['email']."', '".$data['password']."', '".$data['facebook_id']."', null,'".$data['facebook_name'].",null)";
     //se facebook non è stato scelto eseguo query twitter        
     }elseif(!$data['facebook_id']){
-        $query = "insert into tb_clienti (id_client, email, pass, facebook_id, twitter_id) values(null,'".$data['email']."', '".$data['password']."', null, '".$data['twitter_id']."')";
+        $query = "insert into tb_clienti (id_client, email, pass, facebook_id, twitter_id, facebook_name, twitter_name) values(null,'".$data['email']."', '".$data['password']."', null, '".$data['twitter_id']."', null, '".$data['twitter_name']."')";
     //altrimenti sono stati settati entrambe    
     }else{
-        $query = "insert into tb_clienti (id_client, email, pass, facebook_id, twitter_id) values(null,'".$data['email']."', '".$data['password']."', '".$data['facebook_id']."', '".$data['twitter_id']."')";
+        $query = "insert into tb_clienti (id_client, email, pass, facebook_id, twitter_id, facebook_name, twitter_name) values(null,'".$data['email']."', '".$data['password']."', '".$data['facebook_id']."', '".$data['twitter_id']."', '".$data['facebook_name']."', '".$data['twitter_name']."')";
     }
     mysqli_query($conn, $query);
-}
-
-//get user facebook credentials
-function getUser_f_ID($user_ID){
-    global $conn;
-    $query = "select user_f_ID from client_f where user_f_ID =".$user_ID."";
-    $risultato = mysqli_query($conn, $query);
-    return $risultato;
-}
-
-//get ID from email
-function getUserID($email){
-    global $conn;
-    $query = "select id_client from tb_clienti where email ='".$email."'";
-    $risultato = mysqli_query($conn, $query);
-    $riga=mysqli_fetch_assoc($risultato);
-    return $riga['id_client'];
 }
 
 //inserimento dati post
@@ -75,10 +58,33 @@ function insert_post_data($data){
     mysqli_query($conn, $query);
 }
 
-//ottenere i post
-function obtainPost($userid){
+//ottenere tutti i post
+function getAllPost($userid){
     global $conn;
     $query = "select body, date_time, social from tb_post where user_id =".$userid." group by(date_time) desc;";
     $risultato = mysqli_query($conn, $query);
+    return $risultato;
+}
+
+//ottenere i post facebook
+function getFbPost($userid){
+    global $conn;
+    $query = "select body, date_time, social from tb_post where user_id =".$userid." and social = 1 group by(date_time) desc;";
+    $risultato = mysqli_query($conn, $query);
+    return $risultato;
+}
+
+//ottenere i post twitter
+function getTwPost($userid){
+    global $conn;
+    $query = "select body, date_time, social from tb_post where user_id =".$userid." and social = 2 group by(date_time) desc;";
+    $risultato = mysqli_query($conn, $query);
+    return $risultato;
+}
+//ottengo i dati dell'utente(id, nome facebook e username twitter)
+function getUserData($email){
+    global $conn;
+    $query = "select id_client, facebook_name, twitter_name from tb_clienti where email ='".$email."'";
+    $risultato = mysqli_fetch_assoc(mysqli_query($conn, $query));
     return $risultato;
 }
