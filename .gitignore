@@ -8,3 +8,6 @@
 # tenga la propria copia sincronizzata
 composer.phar
 /vendor/
+
+# Cartella di appoggio per dump DB
+/_db/

@@ -2,7 +2,7 @@
     font-family: "Comic Sans MS", cursive, sans-serif;
 }
 
-h1 {font-size: 5vw;}
+h1 {font-size: 10vw;}
 h2 {font-size: 2vw;}
 
 .body-css{
@@ -25,4 +25,3 @@ img.rounded-left{
     bottom: 30%;
     left: 32%;
 }
-

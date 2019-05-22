@@ -1,5 +1,5 @@
 <?php
-    $app_url = "http://localhost/Social_Media_App/";
+    $app_url = "http://localhost/";
 
     //Facebook API
     $fb_app_id = '646457439148163';
