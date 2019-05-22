@@ -11,34 +11,31 @@ db_select("localhost", "root", "", "socialmediadata");
 //eleboro i dati che sono stati inseriti nella registrazione e li inserisco nel db
 //verifico che siano stati settati almeno uno dei tre social, che non sia stato premuto il bottone accedi
 //e che sia la prima volta che accedo al db per caricarlo
-//TODO:inserire parte per instagram
 
-if((isset($_SESSION['facebook_id']) || isset($_SESSION['twitter_id']))&&!isset($_SESSION['btnAccedi'])&&!isset($_SESSION['inserito'])){
-    $_SESSION['inserito']=true;
+if((isset($_SESSION['facebook_id']) || isset($_SESSION['twitter_id']) || isset($_SESSION['instagram_id_ok'])) && !isset($_SESSION['btnAccedi']) && !isset($_SESSION['inserito'])){
     if(!$_SESSION['twitter_id_ok']){
         //twitter non è stato inserito come social
         //inserisco prima i valori relativi alla tabella tb_clienti
         $client_data = ['facebook_id'=>$_SESSION['facebook_id'], 
-             'twitter_id'=>false, 
-             'email'=>$_SESSION['email'],
-             'password'=>$_SESSION['password'],
-             'facebook_name'=>$_SESSION['facebook_name']];
+            'twitter_id'=>false, 
+            'email'=>$_SESSION['email'],
+            'password'=>$_SESSION['password'],
+            'facebook_name'=>$_SESSION['facebook_name']];
         insert_daticliente_db($client_data);
+        $_SESSION['inserito'] = true;
     //facebook non inserito come social    
     }elseif(!$_SESSION['facebook_id_ok']){
         //facebook non inserito come social
         $client_data = ['facebook_id'=>false, 
-             'twitter_id'=>$_SESSION['twitter_id'], 
-             'email'=>$_SESSION['email'],
-             'password'=>$_SESSION['password'],
-             'twitter_name'=>$_SESSION['twitter_name']];
+            'twitter_id'=>$_SESSION['twitter_id'], 
+            'email'=>$_SESSION['email'],
+            'password'=>$_SESSION['password'],
+            'twitter_name'=>$_SESSION['twitter_name']];
         insert_daticliente_db($client_data);
-    //TODO:inserire controllo instagram
-    
+        $_SESSION['inserito'] = true;
     //altrimenti sono stati settati tutti    
     }else{
         //altrimenti sono stati settati tutti
-        //TODO:inserire id instagram
         //inserisco prima i valori relativi alla tabella tb_clienti
         $client_data = ['facebook_id'=>$_SESSION['facebook_id'], 
                         'twitter_id'=>$_SESSION['twitter_id'], 
@@ -47,6 +44,7 @@ if((isset($_SESSION['facebook_id']) || isset($_SESSION['twitter_id']))&&!isset($
                         'twitter_name'=>$_SESSION['twitter_name'],
                         'facebook_name'=>$_SESSION['facebook_name']];
         insert_daticliente_db($client_data);
+        $_SESSION['inserito'] = true;
     }
 
     //se ho settato facebook scarico i dati relativi ai post nel db
@@ -74,10 +72,10 @@ if((isset($_SESSION['facebook_id']) || isset($_SESSION['twitter_id']))&&!isset($
             $timestamp = parsing_facebook($_SESSION['facebook_data']['data'][$i]['created_time']);
             $user_id = getUserID($_SESSION['email']);
             $post_data = ['body'=> addslashes($body),
-                          'id_post'=>$id_post,
-                          'id_social'=>$id_social,
-                          'timestamp'=>$timestamp,
-                          'userID'=>$user_id];
+                            'id_post'=>$id_post,
+                            'id_social'=>$id_social,
+                            'timestamp'=>$timestamp,
+                            'userID'=>$user_id];
             
             insert_post_data($post_data);   
             $i++;
@@ -97,18 +95,33 @@ if((isset($_SESSION['facebook_id']) || isset($_SESSION['twitter_id']))&&!isset($
             $id_post=$_SESSION['twitter_data'][$i]['id_str'];
             $id_social = 2;
             $timestamp = parsing_twitter($_SESSION['twitter_data'][$i]['created_at']);
-          
+
             $user_id = getUserID($_SESSION['email']);
             $post_data = ['body'=> addslashes($body),
-                          'id_post'=>$id_post,
-                          'id_social'=>$id_social,
-                          'timestamp'=>$timestamp,
-                          'userID'=>$user_id];
+                            'id_post'=>$id_post,
+                            'id_social'=>$id_social,
+                            'timestamp'=>$timestamp,
+                            'userID'=>$user_id];
             insert_post_data($post_data);  
             $i++;
         }
     }
-    //TODO:inserire controllo per instagram
+
+    if($_SESSION['instagram_id_ok'] && isset($_SESSION['ig_data'])){
+        $id_social = 3;
+        $user_id = getUserID($_SESSION['email']);
+        $i=0;
+
+        foreach($_SESSION['ig_data'] as $ig_post){
+            $post_data = ['body'=> addslashes(json_encode($ig_post)),
+                        'id_post'=>$i,
+                        'id_social'=>$id_social,
+                        'timestamp'=>date("Y-m-d H:i:s", $ig_post['date']),
+                        'userID'=>$user_id];
+            insert_post_data($post_data);
+            $i++;
+        }
+    }
 }
 //prelevo userID, fb_name e twitter_name
 $_SESSION['user_data'] = getUserData($_SESSION['email']);
@@ -229,16 +242,20 @@ $FbName = explode(" ", $_SESSION['user_data']['facebook_name']);
                                     echo "<a href=".$permalink.">".$permalink."</a>";echo"<br>";echo"<br>";
                                     echo"<img src='".$foto."' alt='Post Image' style='height: 12.9vw; width: 12.6vw'>";
                                 }
-                            }
-                            elseif($_SESSION['riga']['social']==2){
+                            }elseif($_SESSION['riga']['social']==2){
                                 $stringa = explode('://', $_SESSION['riga']['body']);
                                 if($stringa[0]==='http'||$stringa[0]==='https'){
                                     echo "<p><b>Commento assente. Link al post:</b></p><a href=".$riga['body'].">".$riga['body']."</a>";
                                 }else{ 
                                     echo"<p>".$_SESSION['riga']['body']."</p>";
                                 } 
-                            }        
-                            ?></div>
+                            }elseif($_SESSION['riga']['social']==3){
+                                $message = json_decode($_SESSION['riga']['body'],true);
+                            ?>
+                                <p><?= $message["msg"] ?></p><br />
+                                <img style="width: 100%" src='<?= $message["img"] ?>' />
+                            <?php }?>
+                        </div>
                     </div>
                 <?php
                 $i++;

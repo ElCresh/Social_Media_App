@@ -2,7 +2,8 @@
     require_once ('../settings.php');
     require_once ('../database_query/db_conn_query.php');
     require_once ('../php-smtp-email-validation/mail/smtp_validateEmail.class.php');
-    require ("../vendor/autoload.php");
+    require_once ("../vendor/autoload.php");
+    require_once ("../instagramFunction.php");
 
     use Facebook\Facebook;
     session_start();
@@ -205,11 +206,6 @@
                                                     //ho effettuato l'accesso
                                                     $response = $fb->get('/me', $_SESSION['fb_token']);
                                                 }
-                                                //rendo invisibile il pulsante
-                                                if(isset($_SESSION['fb_token'])){
-                                                    echo"<script>document.getElementById('connection').style.display='none'</script>";
-                                                    echo"<script>document.getElementById('btn_image').style.display='none'</script>";
-                                                }
 
                                                 //estraggo i post anche quelli in cui sono taggato
                                                 $posts_request= $fb->get('me/feed?fields=message, created_time, id, permalink_url,full_picture', $_SESSION['fb_token']);
@@ -241,9 +237,14 @@
                                                     //setto che non ho l'id di twitter TODO:instagram e rimando alla Home
                                                     $_SESSION['twitter_id_ok']=false;
                                                     $_SESSION['facebook_id_ok']=true;
-                                                    db_close_conn($conn);
                                                     unset($_SESSION['facebook']);
-                                                    header('Location:../Home/Home.php');
+                                                    header('Location: ../Home/Home.php');
+                                                }
+
+                                                //rendo invisibile il pulsante
+                                                if(isset($_SESSION['fb_token'])){
+                                                    echo"<script>document.getElementById('connection').style.display='none'</script>";
+                                                    echo"<script>document.getElementById('btn_image').style.display='none'</script>";
                                                 }
                                                 
                                             } catch (\Facebook\Exceptions\FacebookResponseException $e) {
@@ -322,19 +323,30 @@
 
                                     // se si è selezionato instagram
                                     if(isset($_SESSION['instagram'])){ ?>
-                                        <div id='inst_connection'>
-                                            <h3>Inserisci le tue credenziali Instagram:</h3>
-                                            <form class='form-inline' name = 'get_ig' action = 'elogin.php' method = 'POST'>
-                                                <div class='form-group'>
-                                                    <input type='text' class='form-control' id='ig_name' name='ig_name' placeholder='Username'>
-                                                    <input type='password' class='form-control' id='ig_password' name='ig_password' placeholder='Password'>
-                                                </div>
-                                                <div>
-                                                    <button type='submit' name='btnTwit' class='btn btn-light w3-hover-yellow' style='border-style: solid; border-color: lightgrey; background-color: greenyellow; color: blue'>Submit</button>
-                                                </div>
-                                            </form>
-                                        </div>
-                                        <br />
+                                        <?php if (isset($_POST['ig_name']) && isset($_POST['ig_password'])) {
+                                            $_SESSION['ig_data'] = getInstagramPost($_POST['ig_name'],$_POST['ig_password']);
+                                        } ?>
+
+                                        <?php if(!isset($_SESSION['ig_data']) || empty($_SESSION['ig_data'])){ ?>
+                                            <div id='inst_connection'>
+                                                <h3>Inserisci le tue credenziali Instagram:</h3>
+                                                <form class='form-inline' name = 'get_ig' action = 'elogin.php' method = 'POST'>
+                                                    <div class='form-group'>
+                                                        <input type='text' class='form-control' id='ig_name' name='ig_name' placeholder='Username'>
+                                                        <input type='password' class='form-control' id='ig_password' name='ig_password' placeholder='Password'>
+                                                    </div>
+                                                    <div>
+                                                        <button type='submit' name='btnTwit' class='btn btn-light w3-hover-yellow' style='border-style: solid; border-color: lightgrey; background-color: greenyellow; color: blue'>Submit</button>
+                                                    </div>
+                                                </form>
+                                                <?php if(isset($_SESSION['ig_data']) && empty($_SESSION['ig_data'])){ ?>
+                                                    <h4><font color="red">Credenziali non valide</font></h4>
+                                                <?php } ?>
+                                            </div>
+                                            <br />
+                                        <?php }else{
+                                            $_SESSION['instagram_id_ok'] = true;
+                                        } ?>
                                     <?php } ?>
                                 </div>
                             </div>

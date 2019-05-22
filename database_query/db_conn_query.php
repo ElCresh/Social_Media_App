@@ -36,11 +36,11 @@ function query($query){
 //inserimento dati cliente nel db
 function insert_daticliente_db($data){
     global $conn;
-    //la password inserita nella registrazione la modifico con la funzione hash
+    //la password inserita nella    registrazione la modifico con la funzione hash
     $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
     //se twitter non è stato scelto eseguo query facebook
     if(!$data['twitter_id']){
-        $query = "insert into tb_clienti (id_client, email, pass, facebook_id, twitter_id, facebook_name, twitter_name) values(null,'".$data['email']."', '".$data['password']."', '".$data['facebook_id']."', null,'".$data['facebook_name'].",null)";
+        $query = "insert into tb_clienti (id_client, email, pass, facebook_id, twitter_id, facebook_name, twitter_name) values(null,'".$data['email']."', '".$data['password']."', '".$data['facebook_id']."', null,'".$data['facebook_name']."',null)";
     //se facebook non è stato scelto eseguo query twitter        
     }elseif(!$data['facebook_id']){
         $query = "insert into tb_clienti (id_client, email, pass, facebook_id, twitter_id, facebook_name, twitter_name) values(null,'".$data['email']."', '".$data['password']."', null, '".$data['twitter_id']."', null, '".$data['twitter_name']."')";
@@ -49,6 +49,24 @@ function insert_daticliente_db($data){
         $query = "insert into tb_clienti (id_client, email, pass, facebook_id, twitter_id, facebook_name, twitter_name) values(null,'".$data['email']."', '".$data['password']."', '".$data['facebook_id']."', '".$data['twitter_id']."', '".$data['facebook_name']."', '".$data['twitter_name']."')";
     }
     mysqli_query($conn, $query);
+}
+
+function getUserID($email){
+    global $conn;
+    $id = -1;
+
+    $query = sprintf("SELECT *
+                        FROM tb_clienti
+                        WHERE email='%s'",
+                        $email
+                    );
+    $result = mysqli_query($conn, $query);
+
+    if($row = mysqli_fetch_assoc($result)){
+        $id = $row['id_client'];
+    }
+
+    return $id;
 }
 
 //inserimento dati post

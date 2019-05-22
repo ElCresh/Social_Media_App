@@ -1,7 +1,7 @@
 <?php
-    $app_url = "https://andreacrescentini.com/sma/";
+    $app_url = "http://localhost/";
 
     //Facebook API
-    $fb_app_id = '2073644426086451';
-    $fb_app_secret = '7f1af22134044791f5468a73db9d602a';
+    $fb_app_id = '646457439148163';
+    $fb_app_secret = 'caae448a3967762864ddcf43a979d514';
 ?>
