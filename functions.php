@@ -37,4 +37,44 @@
 
         return $data;
     }
+
+    function redirect_if_completed(){
+        // Conto quanti sono i social abilitati
+        $num_social = 0;
+        
+        if(isset($_SESSION['facebook'])){
+            $num_social++;
+        }else{
+            $_SESSION['facebook_id_ok'] = false;
+        }
+
+        if(isset($_SESSION['twitter'])){
+            $num_social++;
+        }else{
+            $_SESSION['twitter_id_ok'] = false;
+        }
+
+        if(isset($_SESSION['instagram'])){
+            $num_social++;
+        }
+
+        // Verifico se tutti i login sono validi
+        $finished = 0;
+
+        if(isset($_SESSION['facebook']) && isset($_SESSION['facebook_id_ok']) && $_SESSION['facebook_id_ok']){
+            $finished++;
+        }
+
+        if(isset($_SESSION['twitter']) && isset($_SESSION['twitter_id_ok']) && $_SESSION['twitter_id_ok']){
+            $finished++;
+        }
+
+        if(isset($_SESSION['instagram']) && isset($_SESSION['instagram_id_ok']) && $_SESSION['instagram_id_ok']){
+            $finished++;
+        }
+
+        if($num_social == $finished){
+            echo '<script> window.location.href = "../Home/Home.php";</script>';
+        }
+    }
 ?>

@@ -39,6 +39,7 @@ db_select("localhost", "root", "", "socialmediadata");
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" >
                             <a class="dropdown-item" href="../Home/Home.php">View all posts time-line</a>
                             <a class="dropdown-item" href="../TwitterTimeLine/TwitterTimeline.php">View Twitter posts time-line</a>
+                            <a class="dropdown-item" href="../InstragramTimeLine/InstragramTimeline.php">View Instragram posts time-line</a>
                         </div>
                     </td>  
                     <td style="text-align: right" class="container">

@@ -1,21 +1,14 @@
 <?php
     require_once ('../settings.php');
     require_once ('../database_query/db_conn_query.php');
-    require_once ('../php-smtp-email-validation/mail/smtp_validateEmail.class.php');
     require_once ("../vendor/autoload.php");
-    require_once ("../instagramFunction.php");
+    require_once ("../functions.php");
 
     use Facebook\Facebook;
     session_start();
     
     //varibile globale che contiene il risultato della verifica esistenza email
     global $results;
-    
-    /*
-        NOTA!: Verificare se opportuno mantente i dati del form in sessione.
-        Specialmente la password in chiaro che non dovrebbe mai venir salvata
-        in sessione per questioni di sicurezza
-    */
 
     //recupero il contenuto della textbox email
     if((isset($_POST['email'])||isset($_POST['password']))){
@@ -65,17 +58,16 @@
             
         //è stato premuto il pulsante registra            
         } else{
-            if(isset($_POST['facebook']) || isset($_POST['twitter']) || isset($_POST['instagram'])){
-                if(isset($_POST['facebook'])){
-                    $_SESSION['facebook'] = $_POST['facebook'];
-                }
-                if(isset($_POST['twitter'])){
-                    $_SESSION['twitter'] = $_POST['twitter'];
-                }
-                if(isset($_POST['instagram'])){
-                    $_SESSION['instagram'] = $_POST['instagram'];
-                }
+            if(isset($_POST['facebook'])){
+                $_SESSION['facebook'] = $_POST['facebook'];
             }
+            if(isset($_POST['twitter'])){
+                $_SESSION['twitter'] = $_POST['twitter'];
+            }
+            if(isset($_POST['instagram'])){
+                $_SESSION['instagram'] = $_POST['instagram'];
+            }
+
             //prima verifico che sia stato spuntato almeno un social
             //rimando errore altrimenti
             if(
@@ -83,23 +75,6 @@
                 isset($_SESSION['twitter']) || isset($_POST['twitter']) ||
                 isset($_SESSION['instagram']) || isset($_POST['instagram'])
             ){   
-                /*
-                    NOTA!: Con la mia e-mail (ac@andreacrescentini.com) questo metodo non funzione.
-                    L'ho commentato per cercare di risolvere il problema.
-                */
-                // al primo accesso alla pagina verifico l'esistenza della mail inserita
-                // utilizzo il protocollo smtp per verificare l'esistenza della mail inserita
-                //if(isset($_POST['facebook']) || isset($_POST['twitter'])){
-                //    $sender = 'link89luca@gmail.com';
-                //    $SMTP_Validator = new SMTP_validateEmail();
-                //    $SMTP_Validator->debug = true;-->debug true viene mostrata la serie di richieste/risposte
-                //    $SMTP_Validator->debug = false;
-                //    $results = $SMTP_Validator->validate(array($_SESSION['email']), $sender);
-                //    $_SESSION['risultato'] = $results[$_SESSION['email']];
-                //}
-
-                // Forzo il risultato di verifica e-mail positivo a causa dei
-                // problemi di verifica validità dell'e-mail
                 $_SESSION['risultato'] = true;
                 
                 // ricerco che la mail non sia stata già utilizzata
@@ -177,13 +152,15 @@
                                     
                                         //pulsante rimanda al login facebook
                                     ?>
-                                    <div id='connection'>
-                                        <h3>Effettua il login su Facebook:</h3>
-                                        <a href='<?= $fb->getRedirectLoginHelper()->getLoginUrl($app_url."LoginRegistrazione/elogin.php") ?>'>
-                                            <img id='btn_image' src='../content/login_fb_button.png' width=200 class='hoverable'>
-                                        </a>
-                                    </div>
-                                    <br />
+                                    <?php if(isset($_SESSION['facebook']) && !(isset($_SESSION['facebook_id_ok']) && $_SESSION['facebook_id_ok'])){ ?>
+                                        <div id='connection'>
+                                            <h3>Effettua il login su Facebook:</h3>
+                                            <a href='<?= $fb->getRedirectLoginHelper()->getLoginUrl($app_url."LoginRegistrazione/elogin.php") ?>'>
+                                                <img id='btn_image' src='../content/login_fb_button.png' width=200 class='hoverable'>
+                                            </a>
+                                        </div>
+                                        <br />
+                                    <?php } ?>
                                     <?php
                                         //ottengo il token di accesso
                                         $access_token = $fb->getRedirectLoginHelper()->getAccessToken();
@@ -214,38 +191,17 @@
                                                 //true ritorna un'arrai invece di un oggetto
         
                                                 $_SESSION['facebook_data']=$json=json_decode($_SESSION['post'], true);
-                                                
-                                                //estraggo i post
-                                                //$name_request= json_decode($fb->get('me?fields=first_name', $_SESSION['fb_token'])->getBody(), true);
-                                                //$_SESSION['facebook_data']=$json=json_decode($posts_request->getBody(), true);
-                                                //$_SESSION['client_name'] = $name_request['first_name'];
-                                                                                        
-                                                //verifico che sia stato settato twitter come social o che sia stato settato l'id
-                                                if(isset($_SESSION['twitter']) || isset($_SESSION['twitter_id'])){
-                                                    //ho l'id di twitter
-                                                    if(isset($_SESSION['twitter_id_ok'])){
-                                                        $_SESSION['facebook_id_ok']=true;
-                                                        header('Location:../Home/Home.php');
-                                                        
-                                                    //altrimenti significa che ancora non mi sono loggato su twitter quindi rimango sulla pagina
-                                                    }else{
-                                                        $_SESSION['facebook_id_ok']=true;
-                                                        unset($_SESSION['facebook']);
-                                                    }
-                                                //non ho settato twitter e di conseguenza nemmeno l'id posso andare alla home    
-                                                }else{
-                                                    //setto che non ho l'id di twitter TODO:instagram e rimando alla Home
-                                                    $_SESSION['twitter_id_ok']=false;
-                                                    $_SESSION['facebook_id_ok']=true;
-                                                    unset($_SESSION['facebook']);
-                                                    header('Location: ../Home/Home.php');
-                                                }
+
+                                                $_SESSION['facebook_id_ok']=true;
+                                                redirect_if_completed();
 
                                                 //rendo invisibile il pulsante
-                                                if(isset($_SESSION['fb_token'])){
-                                                    echo"<script>document.getElementById('connection').style.display='none'</script>";
-                                                    echo"<script>document.getElementById('btn_image').style.display='none'</script>";
-                                                }
+                                                if(isset($_SESSION['fb_token'])){ ?>
+                                                    <script>
+                                                        document.getElementById('connection').style.display='none';
+                                                        document.getElementById('btn_image').style.display='none';
+                                                    </script>
+                                                <?php }
                                                 
                                             } catch (\Facebook\Exceptions\FacebookResponseException $e) {
                                                 echo  'Graph returned an error: ' . $e->getMessage();
@@ -255,9 +211,9 @@
                                             }
                                         }
                                 //se è stata selezionata la checkbox di twitter
-                                if(isset($_SESSION['twitter'])){ ?>
+                                if(isset($_SESSION['twitter']) && !(isset($_SESSION['twitter_id_ok']) && $_SESSION['twitter_id_ok'])){ ?>
                                     <!-- pulsante rimanda al login di twitter -->
-                                    <div id='twit_connection'>>
+                                    <div id='twit_connection'>
                                         <h3>Inserisci il tuo username Twitter:</h3>
                                         <form class='form-inline' name = 'get_twit' action = 'elogin.php' method = 'POST'>
                                             <div class='form-group'>
@@ -297,27 +253,11 @@
                                             if(array_key_exists('errors', $string)) {
                                                 echo "<h3>Sorry, there was a problem.</h3><p>Twitter returned the following error message:</p><p><em>".$string['errors'][0]["message"]."</em></p>";exit();}
 
-                                            if(isset($_SESSION['facebook']) || isset($_SESSION['facebook_id'])){
-                                                if(isset($_SESSION['facebook_id_ok'])){
-                                                    $_SESSION['twitter_id_ok']=true;
-                                                    unset($_SESSION['twitter']);
-                                                    header("Location: ../Home/Home.php");
-                                                }else{
-                                                    $_SESSION['twitter_id_ok']=true;
-                                                    //script per eliminare dalla pagina gli elementi di twitter
-                                                    echo"<script>
-                                                        document.getElementById('twit_connection').style.display='none';
-                                                    </script>";
-                                                    unset($_SESSION['twitter']);
-                                                }
-                                            }else{
-                                                //altrimenti setto che non ho l'id di twitter TODO:instagram e rimando alla Home
-                                                $_SESSION['facebook_id_ok']=false;
-                                                $_SESSION['twitter_id_ok'] = true;
-                                                db_close_conn($conn);
-                                                unset($_SESSION['facebook']);
-                                                header("Location: ../Home/Home.php");
-                                            }
+                                            $_SESSION['twitter_id_ok'] = true; ?>
+                                            <script>
+                                                document.getElementById('twit_connection').style.display='none';
+                                            </script>
+                                            <?php redirect_if_completed();
                                         }
                                     }
 
@@ -346,6 +286,7 @@
                                             <br />
                                         <?php }else{
                                             $_SESSION['instagram_id_ok'] = true;
+                                            redirect_if_completed();
                                         } ?>
                                     <?php } ?>
                                 </div>

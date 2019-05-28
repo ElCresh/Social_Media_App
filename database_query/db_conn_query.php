@@ -99,6 +99,22 @@ function getTwPost($userid){
     $risultato = mysqli_query($conn, $query);
     return $risultato;
 }
+
+//ottenere i post instagram
+function getIgPost($userid){
+    global $conn;
+    $query = "select body, date_time, social from tb_post where user_id =".$userid." and social = 3 group by(date_time) desc;";
+    $risultato = mysqli_query($conn, $query);
+    return $risultato;
+}
+
+//elimina i post instagram
+function delIgPost($userid){
+    global $conn;
+    $query = "delete from tb_post where user_id =".$userid." and social = 3;";
+    mysqli_query($conn, $query);
+}
+
 //ottengo i dati dell'utente(id, nome facebook e username twitter)
 function getUserData($email){
     global $conn;

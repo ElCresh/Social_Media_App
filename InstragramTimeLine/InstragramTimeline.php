@@ -21,14 +21,14 @@ db_select("localhost", "root", "", "socialmediadata");
         <link rel="stylesheet" href="../css/timeline.css">
         <link rel="stylesheet" href="../css/popin.css">
         <link rel="icon" href="../content/social-image.ico" />
-        <title>TwitterTimeline</title>
+        <title>InstagramTimeline</title>
     </head> 
     <body>
         <nav class="navbar navbar-expand-xl"style="background-color:  #10707f">
             <table>
                 <tr>
                     <td style="border-right: solid 1px lightgray; padding-right: 20px; padding-left: 15px">
-                        <b class="myfont w3-opacity" style="font-size: 25px; color: white">TwitterHome</b>
+                        <b class="myfont w3-opacity" style="font-size: 25px; color: white">Instagram Home</b>
                     </td>
                     <td style="padding-left: 20px">
                         <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="font-size: 15px">
@@ -37,7 +37,7 @@ db_select("localhost", "root", "", "socialmediadata");
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" >
                             <a class="dropdown-item" href="../Home/Home.php">View all posts time-line</a>
                             <a class="dropdown-item" href="../FacebookTimeLine/FacebookTimeline.php">View Facebook posts time-line</a>
-                            <a class="dropdown-item" href="../InstragramTimeLine/InstragramTimeline.php">View Instragram posts time-line</a>
+                            <a class="dropdown-item" href="../TwitterTimeLine/TwitterTimeline.php">View Twitter posts time-line</a>
                         </div>
                     </td>                    
                     <td style="text-align: right" class="container">
@@ -50,12 +50,12 @@ db_select("localhost", "root", "", "socialmediadata");
         </nav>
         <div class="container" id="timeline" style = "margin-top: 0">
             <div class="page-header">
-                <h1 class="myfont">Twitter-Timeline</h1>
+                <h1 class="myfont">Instagram-Timeline</h1>
             </div>
             <ul class="timeline">
                 <?php
                 //ricerco i post da stampare sulla time-line
-                $risultato = getTwPost($_SESSION['user_data']['id_client']);
+                $risultato = getIgPost($_SESSION['user_data']['id_client']);
                 $i=0;
                 while ($_SESSION['riga']=mysqli_fetch_assoc($risultato)){
                 ?>
@@ -68,7 +68,7 @@ db_select("localhost", "root", "", "socialmediadata");
                         echo"<li class='timeline-inverted'>";
                     }
                     ?>
-                    <div class="timeline-badge info"><i><svg xmlns="http://www.w3.org/2000/svg" width="30" height="50" viewBox="-1 -2 35 40" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M32 7.075c-1.175 0.525-2.444 0.875-3.769 1.031 1.356-0.813 2.394-2.1 2.887-3.631-1.269 0.75-2.675 1.3-4.169 1.594-1.2-1.275-2.906-2.069-4.794-2.069-3.625 0-6.563 2.938-6.563 6.563 0 0.512 0.056 1.012 0.169 1.494-5.456-0.275-10.294-2.888-13.531-6.862-0.563 0.969-0.887 2.1-0.887 3.3 0 2.275 1.156 4.287 2.919 5.463-1.075-0.031-2.087-0.331-2.975-0.819 0 0.025 0 0.056 0 0.081 0 3.181 2.263 5.838 5.269 6.437-0.55 0.15-1.131 0.231-1.731 0.231-0.425 0-0.831-0.044-1.237-0.119 0.838 2.606 3.263 4.506 6.131 4.563-2.25 1.762-5.075 2.813-8.156 2.813-0.531 0-1.050-0.031-1.569-0.094 2.913 1.869 6.362 2.95 10.069 2.95 12.075 0 18.681-10.006 18.681-18.681 0-0.287-0.006-0.569-0.019-0.85 1.281-0.919 2.394-2.075 3.275-3.394z"></path></svg></i></div>
+                    <div class="timeline-badge info"><i><svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="25" height="50" viewBox="-1 -1 25 30"><path d="M7 1c-0.811 0-1.587 0.161-2.295 0.455-0.735 0.304-1.395 0.75-1.948 1.302s-0.998 1.213-1.302 1.948c-0.294 0.708-0.455 1.484-0.455 2.295v10c0 0.811 0.161 1.587 0.455 2.295 0.304 0.735 0.75 1.395 1.303 1.948s1.213 0.998 1.948 1.303c0.707 0.293 1.483 0.454 2.294 0.454h10c0.811 0 1.587-0.161 2.295-0.455 0.735-0.304 1.395-0.75 1.948-1.303s0.998-1.213 1.303-1.948c0.293-0.707 0.454-1.483 0.454-2.294v-10c0-0.811-0.161-1.587-0.455-2.295-0.304-0.735-0.75-1.395-1.303-1.948s-1.213-0.998-1.948-1.303c-0.707-0.293-1.483-0.454-2.294-0.454zM7 3h10c0.544 0 1.060 0.108 1.529 0.303 0.489 0.202 0.929 0.5 1.299 0.869s0.667 0.81 0.869 1.299c0.195 0.469 0.303 0.985 0.303 1.529v10c0 0.544-0.108 1.060-0.303 1.529-0.202 0.489-0.5 0.929-0.869 1.299s-0.81 0.667-1.299 0.869c-0.469 0.195-0.985 0.303-1.529 0.303h-10c-0.544 0-1.060-0.108-1.529-0.303-0.489-0.202-0.929-0.5-1.299-0.869s-0.667-0.81-0.869-1.299c-0.195-0.469-0.303-0.985-0.303-1.529v-10c0-0.544 0.108-1.060 0.303-1.529 0.202-0.489 0.5-0.929 0.869-1.299s0.81-0.667 1.299-0.869c0.469-0.195 0.985-0.303 1.529-0.303zM16.989 11.223c-0.15-0.972-0.571-1.857-1.194-2.567-0.383-0.437-0.842-0.808-1.362-1.092-0.503-0.275-1.061-0.465-1.647-0.552-0.464-0.074-0.97-0.077-1.477-0.002-0.668 0.099-1.288 0.327-1.836 0.655-0.569 0.341-1.059 0.789-1.446 1.312s-0.674 1.123-0.835 1.766c-0.155 0.62-0.193 1.279-0.094 1.947s0.327 1.288 0.655 1.836c0.341 0.569 0.789 1.059 1.312 1.446s1.122 0.674 1.765 0.836c0.62 0.155 1.279 0.193 1.947 0.094s1.288-0.327 1.836-0.655c0.569-0.341 1.059-0.789 1.446-1.312s0.674-1.122 0.836-1.765c0.155-0.62 0.193-1.279 0.094-1.947zM15.011 11.517c0.060 0.404 0.037 0.798-0.056 1.168-0.096 0.385-0.268 0.744-0.502 1.059s-0.528 0.584-0.868 0.788c-0.327 0.196-0.698 0.333-1.101 0.393s-0.798 0.037-1.168-0.056c-0.385-0.096-0.744-0.268-1.059-0.502s-0.584-0.528-0.788-0.868c-0.196-0.327-0.333-0.698-0.393-1.101s-0.037-0.798 0.056-1.168c0.096-0.385 0.268-0.744 0.502-1.059s0.528-0.584 0.868-0.788c0.327-0.196 0.698-0.333 1.101-0.393 0.313-0.046 0.615-0.042 0.87-0.002 0.37 0.055 0.704 0.17 1.003 0.333 0.31 0.169 0.585 0.391 0.815 0.654 0.375 0.428 0.63 0.963 0.72 1.543zM18.5 6.5c0-0.552-0.448-1-1-1s-1 0.448-1 1 0.448 1 1 1 1-0.448 1-1z"></path></svg></i></div>
                     <div class="timeline-panel">
                         <div class="timeline-heading">
                             <h4 class="timeline-title"></h4><!--utilizzare il nome per timeline-->
@@ -76,14 +76,9 @@ db_select("localhost", "root", "", "socialmediadata");
                         </div>
                         <!-- la proprietà word-wrap consente di spezzare le parole ed andare a capo quando occorre -->
                         <div class="timeline-body" style="word-wrap: break-word;">
-                            <?php 
-                                $stringa = explode('://', $_SESSION['riga']['body']);
-                                if($stringa[0]==='http'||$stringa[0]==='https'){
-                                    echo "<p><b>Commento assente. Link al post:</b></p><a href=".$riga['body'].">".$riga['body']."</a>";
-                                }else{ 
-                                    echo"<p>".$_SESSION['riga']['body']."</p>";
-                                }        
-                            ?></div>
+                            <?php $message = json_decode($_SESSION['riga']['body'],true); ?>
+                            <p><?= $message["msg"] ?></p><br />
+                            <img style="width: 100%" src='<?= $message["img"] ?>' />
                     </div>
                 <?php
                 $i++;
