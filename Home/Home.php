@@ -8,7 +8,7 @@ require_once ("../settings.php");
 
 use Facebook\Facebook;
 
-db_select("localhost", "root", "", "socialmediadata");
+db_select("zpj83vpaccjer3ah.chr7pe7iynqr.eu-west-1.rds.amazonaws.com", "qu660m0yzr7x5pjv", "rwwj6y6awue2yjis", "gw9d5a897do2l0p4");
 
 // Verifico il refresh di Instragram
 if(isset($_REQUEST['ig_reload'])){

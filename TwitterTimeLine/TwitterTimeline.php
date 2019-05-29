@@ -3,7 +3,7 @@ session_start();
 require '../database_query/db_conn_query.php';
 require '../parsing_date/parsing_date.php';
 require ("../vendor/autoload.php");
-db_select("localhost", "root", "", "socialmediadata");
+db_select("zpj83vpaccjer3ah.chr7pe7iynqr.eu-west-1.rds.amazonaws.com", "qu660m0yzr7x5pjv", "rwwj6y6awue2yjis", "gw9d5a897do2l0p4");
 ?>
 <html>
     <head>
