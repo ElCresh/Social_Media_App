@@ -1,5 +1,5 @@
 <?php
-    $app_url = "http://localhost/";
+    $app_url = "https://socialmediadata.herokuapp.com/";
 
     //Facebook API
     $fb_app_id = '646457439148163';

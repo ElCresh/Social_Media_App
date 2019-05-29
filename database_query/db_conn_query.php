@@ -4,10 +4,10 @@ $conn;
 //selezione del db e connesisone
 function db_select(){
     //DB Configs
-    $host = "localhost";
-    $user = "root";
-    $pasw = "";
-    $dbnm = "SocialMediaApp";
+    $host = "zpj83vpaccjer3ah.chr7pe7iynqr.eu-west-1.rds.amazonaws.com";
+    $user = "qu660m0yzr7x5pjv";
+    $pasw = "rwwj6y6awue2yjis";
+    $dbnm = "gw9d5a897do2l0p4";
     
     global $conn;
     $conn = mysqli_connect($host,$user,$pasw,$dbnm);
