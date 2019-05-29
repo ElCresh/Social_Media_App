@@ -32,6 +32,7 @@
 
             $instagram->logout();
         } catch(Exception $e){
+            var_dump($e);
             //Something went wrong...
         }
 
