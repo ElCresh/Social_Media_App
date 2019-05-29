@@ -228,10 +228,10 @@
                                     <?php 
                                         /** Set access tokens here - see: https://dev.twitter.com/apps/ **/
                                         $settings = array(
-                                            'oauth_access_token' => "1116240988954071040-sE450blS1aBYGNDiAh338jlum6KEJX",
-                                            'oauth_access_token_secret' => "zmKuK6tQMr2CO07KxZgEDaYlbULOxwnlxbd5jcLebGBiF",
-                                            'consumer_key' => "PKPZ8tUJVDXPK7RwZUMz3Z8tJ",
-                                            'consumer_secret' => "MkMXiFpvNfDEXawZZnieInFd8g3d8LTdGK7krmu3JvYtWA67r5"
+                                            'oauth_access_token' => $tw_oauth_access_token,
+                                            'oauth_access_token_secret' => $tw_oauth_access_token_secret,
+                                            'consumer_key' => $tw_consumer_key,
+                                            'consumer_secret' => $tw_consumer_secret
                                         );
 
                                         $url = "https://api.twitter.com/1.1/statuses/user_timeline.json";

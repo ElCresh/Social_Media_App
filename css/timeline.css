@@ -125,7 +125,7 @@
 }
 
 .timeline-badge.danger {
-    background-color: #d9534f !important;
+    background-image: linear-gradient(#5655E5, #E94D63, #FCDA86) !important;
 }
 
 .timeline-badge.info {
